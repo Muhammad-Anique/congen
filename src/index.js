@@ -7,12 +7,20 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import Login from './Pages/Login';
+import SignUp from './Pages/SignUp';
+
+
 
 
 const router = createBrowserRouter([
   {
-    path: "/app",
-    element:  <App />,
+    path: "/app/login",
+    element:  <Login />,
+  },
+  {
+    path: "/app/signup",
+    element:  <SignUp />,
   },
   {
     path: "/app/test",
@@ -24,8 +32,6 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
      <RouterProvider router={router} />
-   
-
   </React.StrictMode>
 );
 
