@@ -1,6 +1,6 @@
 import React from 'react'
 
-function OldDashboard() {
+function PageSelector() {
   return (
     <div>
       
@@ -8,4 +8,4 @@ function OldDashboard() {
   )
 }
 
-export default OldDashboard
+export default PageSelector

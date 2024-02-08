@@ -1,19 +1,52 @@
 import React, { useState } from 'react'
+import { Navigate, useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import supabase from '../config/supabaseClient';
+import { act } from 'react-dom/test-utils';
+import { useDispatch } from 'react-redux';
+import { setNavigation } from '../store/slices/navigationSlice';
 
-function ActivitySelector() {
 
+function ActivitySelector(props) {
+  const dispatch =useDispatch()
+  const navigate = useNavigate()
+  const handleSuccess = (msg) => {
+    toast.success(msg, {
+      position: "top-right",
+      autoClose: 3000, // Close the notification after 3 seconds
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  const handleFailure = (msg) => {
+    toast.error(msg, {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+  console.log("Prop.data = ", props.Data)
   const [activity, setActivity] = useState({
     "Indoor": {
       "isActive": true,
       "rating":[false, false, false],
       "preferredActivities":[
-        { "activity1" : false,
-        "activity2" : false,
-        "activity3" : false,
-        "activity4" : false,
-        "activity5" : false,
-        "activity6" : false,
-        "activity7" : false}
+        { "Craft workshops such as ceramics, knitting, or painting." : false,
+        "Book clubs or literary discussion groups." : false,
+        "Movie or documentary nights with group discussions." : false,
+        "Wellness activities" : false,
+        "DIY or home improvement courses for small domestic projects." : false,
+        "Guided tastings of wines or foods, where each participant brings something to share" : false,
+         }
       ]
 
     },
@@ -21,32 +54,37 @@ function ActivitySelector() {
       "isActive": false,
       "rating":[false, false, false],
       "preferredActivities":[
-        { "activity1" : false,
-          "activity2" : false,
-          "activity3" : false,
-          "activity4" : false,
-          "activity5" : false,
-          "activity6" : false,
-          "activity7" : false}
+        { "Nature trekking on marked trails." : false,
+          "Guided tours to museums or historical sites." : false,
+          "Participation in clubs or interest groups such as photography, birdwatching, or stargazing." : false,
+          "Community volunteer activities, such as park clean-ups or participation in environmental projects." : false,
+          "Gardening or horticulture courses in community spaces." : false,
+         }
       ]
-
+      
     },
     "Remote":{
       "isActive": false,
       "rating":[false, false, false],
       "preferredActivities":[
-        { "activity1" : false,
-        "activity2" : false,
-        "activity3" : false,
-        "activity4" : false,
-        "activity5" : false,
-        "activity6" : false,
-        "activity7" : false}
+        { "Call" : false,
+        "Videocalls" : false,
+        "Webinars or online conferences on general or specific topics of interest." : false,
+        "Online study or reading groups." : false,
+        "Participation in online group games, like quizzes or strategy games." : false,
+        "Online fitness or yoga sessions for groups." : false,
+        "Virtual clubs, like a movie club where a film is watched separately and then discussed together online." : false}
       ]
     }
   })
 
 
+
+
+  function getTrueRatingIndex(activity) {
+    const index = activity.rating.findIndex(value => value === true);
+    return index !== -1 ? index + 1 : null; // Adding 1 to match the index in your array
+  }
   function isActivityActive(activityType) {
     return activity[activityType].isActive;
   }
@@ -67,6 +105,89 @@ function ActivitySelector() {
     });
   }
 
+  
+  const handleSubmit = async (e) => {
+   
+
+    try {
+      // Make POST request to API
+      const requestBody = {
+        ...props.Data,
+        isYoung : props.isYoung, 
+        isOld : props.isOld,
+        ...activity
+      };
+
+   
+      console.log("---->",props.Data, activity) 
+
+      const name = props.Data.name;
+      const email = props.Data.email;
+      const password = props.Data.password;
+      const contactNo = props.Data.contactNo;
+      const dob = props.Data.dob;
+      const isYoung= props.isYoung;
+      const isOld=props.isOld;
+      const Indoor_ = activity.Indoor;
+      const Outdoor_ = activity.Outdoor;
+      const Remote_ = activity.Remote;
+      const IndoorActivities = Indoor_.preferredActivities[0]
+      const OutdoorActivities = Outdoor_.preferredActivities[0]
+      const RemoteActivities  = Remote_.preferredActivities[0]
+      const Indoor = getTrueRatingIndex(Indoor_);
+      const Outdoor = getTrueRatingIndex(Outdoor_);
+      const Remote = getTrueRatingIndex(Remote_);
+
+      // console.log(
+      //   "Name:", name,
+      //   "Email:", email,
+      //   "Password:", password,
+      //   "Contact:", contactNo,
+      //   "Date of Birth:", dob,
+      //   "Is Young:", isYoung,
+      //   "Is Old:", isOld,
+      //   "Indoor Activity:", Indoor,
+      //   "Outdoor Activity:", Outdoor,
+      //   "Remote Activity:", Remote,
+      //   "Preferred Indoor Activity:", IndoorAct,
+      //   "Preferred Outdoor Activity:", OutdoorAct,
+      //   "Preferred Remote Activity:", RemoteAct,
+      //   "Indoor Index:", indoorIndex,
+      //   "Outdoor Index:", outdoorIndex,
+      //   "Remote Index:", remoteIndex
+      // );
+      
+
+       
+     
+      const { data, error } = await supabase
+      .from('user')
+      .insert([
+        {name:name,email:email, password:password,isYoung:isYoung, isOld: isOld,contact:contactNo,dob:dob,Indoor:Indoor,Outdoor:Outdoor,
+           Remote:Remote, IndoorActivities: IndoorActivities,OutdoorActivities:OutdoorActivities,RemoteActivities:RemoteActivities},
+      ])
+      .select()
+      
+    
+      if(data){
+        console.log(data)
+        handleSuccess("Registered Successfully")
+        setTimeout(() => {
+          dispatch(setNavigation(0))
+        }, 1000);
+
+      }
+      if(error){
+        console.log(error)
+        handleFailure("SignUp Failed")
+
+      }
+
+    } catch (error) {
+      console.error('Error submitting form:', error.message);
+      alert('Failed to submit form. Please try again.');
+    }
+  };
   return (
     <div className='flex flex-col justify-center  gap-[12px]'>
         <p className='text-lg text-gray-500 font-bold'>Select Activity Type</p>
@@ -107,39 +228,37 @@ function ActivitySelector() {
 
           <p className='text-lg text-gray-500 font-bold'>Select {Object.keys(activity).find(type => activity[type].isActive)} Activity</p>
           <div className='flex flex-col h-[200px] overflow-y-scroll gap-3 px-[10px] '>
-            {Array.from({ length: 4 }, (_, index) => (
-              <div key={index} className='flex flex-row gap-2 border-2 rounded-lg p-3 border-primary'>
-                <input
-                  type="checkbox"
-                  checked={activity[Object.keys(activity).find(type => activity[type].isActive)].preferredActivities.includes(index)}
-                  onChange={() => {
-                    const newPreferredActivities = [...activity[Object.keys(activity).find(type => activity[type].isActive)].preferredActivities];
-                    const indexOfActivity = newPreferredActivities.indexOf(index);
+          {Array.from({ length: 4 }, (_, index) => (
+            <div key={index} className='flex flex-row gap-2 border-2 rounded-lg p-3 border-primary'>
+              <input
+                type="checkbox"
+                checked={activity[Object.keys(activity).find(type => activity[type].isActive)].preferredActivities[0][Object.keys(activity[Object.keys(activity).find(type => activity[type].isActive)].preferredActivities[0])[index]]}
+                onChange={() => {
+                  const newPreferredActivities = [...activity[Object.keys(activity).find(type => activity[type].isActive)].preferredActivities];
+                  const key = Object.keys(activity[Object.keys(activity).find(type => activity[type].isActive)].preferredActivities[0])[index];
+                  const indexOfActivity = newPreferredActivities[0][key];
 
-                    if (indexOfActivity !== -1) {
-                      // If index exists in the array, remove it
-                      newPreferredActivities.splice(indexOfActivity, 1);
-                    } else {
-                      // If index doesn't exist in the array, add it
-                      newPreferredActivities.push(index);
-                    }
+                  newPreferredActivities[0][key] = !indexOfActivity;
 
-                    setActivity(prevActivity => ({
-                      ...prevActivity,
-                      [Object.keys(prevActivity).find(type => prevActivity[type].isActive)]: {
-                        ...prevActivity[Object.keys(prevActivity).find(type => prevActivity[type].isActive)],
-                        preferredActivities: newPreferredActivities,
-                      },
-                    }));
-                  }}
-                />
-                <p>Indoor Activity {index + 1}</p>
-              </div>
-            ))}
-          </div>
+                  setActivity(prevActivity => ({
+                    ...prevActivity,
+                    [Object.keys(prevActivity).find(type => prevActivity[type].isActive)]: {
+                      ...prevActivity[Object.keys(prevActivity).find(type => prevActivity[type].isActive)],
+                      preferredActivities: newPreferredActivities,
+                    },
+                  }));
+                }}
+              />
+              <p className='max-w-[250px] h-auto'>{Object.keys(activity[Object.keys(activity).find(type => activity[type].isActive)].preferredActivities[0])[index]}</p>
+            </div>
+          ))}
+        </div>
+        <div className='flex flex-row justify-between gap-3'>
+        <button onClick={()=>{handleSubmit()}} className='w-full h-[45px] mt-[24px] bg-primary hover:bg-[#66aebd] text-white font-bold text-xl rounded-xl'>SignUp</button>
+        </div>
+        
+    <ToastContainer />
 
-
-        <button className='w-[360px] h-[45px] mt-[24px] bg-primary hover:bg-[#66aebd] text-white font-bold text-xl rounded-xl'>Next</button>
     </div>
   )
 }
