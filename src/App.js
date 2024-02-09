@@ -9,27 +9,33 @@ import Login from './Pages/Login';
 import SignUp from './Pages/SignUp';
 import { setNavigation } from './store/slices/navigationSlice';
 import supabase from './config/supabaseClient';
+import OldDashboard from './Pages/OldDashboard';
 
 
 
 function App() {
   console.log(supabase)
   const dispatch = useDispatch();
-  dispatch(setNavigation(0))
   function Page(){
       const data = useSelector((state)=>{ return state.navigation.data })
       console.log("data " ,data);
-      if(data==2){
-        return(
-        <YoungDashboard/>               
-        )
-      } else if(data==0){
+       if(data==0){
         return(
         <Login/>         
         )
       }else if(data==1){
         return(
           <SignUp/>
+        )
+      }
+      else if(data==2){
+        return(
+        <YoungDashboard/>               
+        )
+      }
+      else if(data==3){
+        return(
+          <OldDashboard/>
         )
       }
 

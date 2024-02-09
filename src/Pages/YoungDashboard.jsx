@@ -3,9 +3,14 @@ import logo from '../Assets/logo.jpg'
 import { useDispatch, useSelector } from 'react-redux'
 import { setYoungDashboardSlice } from '../store/slices/youngDashboardSlice'
 import './checkbox.css'
+import ChatBox from '../Components/ChatBox'
+import { FiMessageSquare } from "react-icons/fi";
+import { FiLogOut } from "react-icons/fi";
+import { FiUser } from "react-icons/fi";
+
 import SeniorProfiles from '../Components/SeniorProfiles'
-
-
+import { FiUsers } from "react-icons/fi";
+import { setNavigation } from '../store/slices/navigationSlice'
 function YoungDashboard() {
   const dispatch = useDispatch()
 
@@ -23,7 +28,6 @@ function YoungDashboard() {
           "Guided tastings of wines or foods, where each participant brings something to share" : false,
            }
         ]
-  
       },
       "Outdoor":{
         "rating":[false, false, false],
@@ -34,8 +38,7 @@ function YoungDashboard() {
             "Community volunteer activities, such as park clean-ups or participation in environmental projects." : false,
             "Gardening or horticulture courses in community spaces." : false,
            }
-        ]
-        
+        ]    
       },
       "Remote":{
         "rating":[false, false, false],
@@ -221,8 +224,9 @@ function YoungDashboard() {
       </div>
     </div>          
       )
-    } else if(data==1){
-
+    }
+    
+    else if(data==1){
       return(
         <div className='w-[82vw] bg-gray-100 p-[50px] flex flex-col gap-10'>
         <div className='flex flex-row justify-between items-center'>
@@ -233,268 +237,50 @@ function YoungDashboard() {
         <h1 className='font-bold'>{user.name}</h1>
         </div>
         <SeniorProfiles user={user}/>
-        
-
-    </div>    
+        </div>    
       )
-    }else if(data==2){
+    }
+    
+    else if(data==2){
       return(
-        
-
-    <div className='w-[82vw] bg-gray-200 p-[50px] flex flex-col gap-10'>
-    <div className='flex flex-row justify-between items-center'>
-    <h1 className='text-4xl font-bold '>Chat</h1>
-    <div className='w-[240px] px-[15px] py-[10px] h-[40px] bg-white rounded-full flex items-center justify-center'>
-      <p className='font-medium'>john@gmail.com</p>
-
-
-    </div>
-    <h1 className='font-bold'>Mr. John Smith</h1>
-
-    </div>
-
-  <div className='h-full w-full flex flex-row justify-between flex-wrap'>
-    <div className='bg-gray-100 w-[30%] h-full overflow-y-auto '>
-      
-    <div className='flex flex-row w-full p-4 h-[100px] bg-gray-100 gap-4 items-center '>
-        <div className='w-[70px] h-[70px] rounded-full bg-gray-400 '></div>
-        <div>
-          <h1 className='font-bold'>Jhoon Ali bheem</h1>
-          <p>jhon@gmail.com</p>
-        </div>
-    </div>
-
-    <div className='flex flex-row w-full p-4 h-[100px]  gap-4 items-center '>
-        <div className='w-[70px] h-[70px] rounded-full bg-gray-400 '></div>
-        <div>
-          <h1 className='font-bold'>Jhoon Ali bheem</h1>
-          <p>jhon@gmail.com</p>
-        </div>
-    </div>
-
-    </div>
-
-
-    <div className='bg-[#ffffff] w-[70%] h-[100%]'>
-      <div className='w-full h-[10%] shadow-md'>
-        <div className='flex flex-row w-full p-2 px-[25px] h-full  gap-4 items-center '>
-            <div>
-              <h1 className='font-bold'>Jhoon Ali bheem</h1>
-              <p>jhon@gmail.com</p>
-            </div>
-        </div>
-
-
-      </div>
-      <div className='w-full h-[65%] p-2 flex flex-col gap-2 overflow-y-auto'>
-
-        <div name="message" className='flex-col px-3 py-2 bg-green-300'>
-          <div className='flex flex-row gap-2 items-center'>
-            <div className='h-[40px] w-[40px] rounded-full bg-red-300'></div>
-            <div className='flex flex-col'>
-            <p className='font-medium'>John Smith</p>
-            <p className='text-sm'>03/04/2011</p>
-            </div>
-          </div>
-          <div className='mt-3 text-lg'>
-            <p>Hello My name is Anique elk  klekd dkl ldk eldke dkle dlekd elkd eldke dlke dlekd eldk eldk eldke dlekd eldk eldke dlek dlekd eldk eld eldk eldk eldk eldke dlekd elkd eldk eldk eld eld eldk eldk </p>
-          </div>
-        </div>
-
-        <div name="message" className='flex-col px-3 py-2 bg-green-300'>
-          <div className='flex flex-row gap-2 items-center'>
-            <div className='h-[40px] w-[40px] rounded-full bg-red-300'></div>
-            <div className='flex flex-col'>
-            <p className='font-medium'>John Smith</p>
-            <p className='text-sm'>03/04/2011</p>
-            </div>
-          </div>
-          <div className='mt-3 text-lg'>
-            <p>Hello My name is Anique elk  klekd dkl ldk eldke dkle dlekd elkd eldke dlke dlekd eldk eldk eldke dlekd eldk eldke dlek dlekd eldk eld eldk eldk eldk eldke dlekd elkd eldk eldk eld eld eldk eldk </p>
-          </div>
-        </div>
-
-
-        <div name="message" className='flex-col px-3 py-2 bg-green-300'>
-          <div className='flex flex-row gap-2 items-center'>
-            <div className='h-[40px] w-[40px] rounded-full bg-red-300'></div>
-            <div className='flex flex-col'>
-            <p className='font-medium'>John Smith</p>
-            <p className='text-sm'>03/04/2011</p>
-            </div>
-          </div>
-          <div className='mt-3 text-lg'>
-            <p>Hello My name is Anique elk  klekd dkl ldk eldke dkle dlekd elkd eldke dlke dlekd eldk eldk eldke dlekd eldk eldke dlek dlekd eldk eld eldk eldk eldk eldke dlekd elkd eldk eldk eld eld eldk eldk </p>
-          </div>
-        </div>
-
-
-
-        <div name="message" className='flex-col px-3 py-2 bg-green-300'>
-          <div className='flex flex-row gap-2 items-center'>
-            <div className='h-[40px] w-[40px] rounded-full bg-red-300'></div>
-            <div className='flex flex-col'>
-            <p className='font-medium'>John Smith</p>
-            <p className='text-sm'>03/04/2011</p>
-            </div>
-          </div>
-          <div className='mt-3 text-lg'>
-            <p>Hello My name is Anique elk  klekd dkl ldk eldke dkle dlekd elkd eldke dlke dlekd eldk eldk eldke dlekd eldk eldke dlek dlekd eldk eld eldk eldk eldk eldke dlekd elkd eldk eldk eld eld eldk eldk </p>
-          </div>
-        </div>
-
-
-
-        <div name="message" className='flex-col px-3 py-2 bg-green-300'>
-          <div className='flex flex-row gap-2 items-center'>
-            <div className='h-[40px] w-[40px] rounded-full bg-red-300'></div>
-            <div className='flex flex-col'>
-            <p className='font-medium'>John Smith</p>
-            <p className='text-sm'>03/04/2011</p>
-            </div>
-          </div>
-          <div className='mt-3 text-lg'>
-            <p>Hello My name is Anique elk  klekd dkl ldk eldke dkle dlekd elkd eldke dlke dlekd eldk eldk eldke dlekd eldk eldke dlek dlekd eldk eld eldk eldk eldk eldke dlekd elkd eldk eldk eld eld eldk eldk </p>
-          </div>
-        </div>
-
-
-
-        <div name="message" className='flex-col px-3 py-2 bg-green-300'>
-          <div className='flex flex-row gap-2 items-center'>
-            <div className='h-[40px] w-[40px] rounded-full bg-red-300'></div>
-            <div className='flex flex-col'>
-            <p className='font-medium'>John Smith</p>
-            <p className='text-sm'>03/04/2011</p>
-            </div>
-          </div>
-          <div className='mt-3 text-lg'>
-            <p>Hello My name is Anique elk  klekd dkl ldk eldke dkle dlekd elkd eldke dlke dlekd eldk eldk eldke dlekd eldk eldke dlek dlekd eldk eld eldk eldk eldk eldke dlekd elkd eldk eldk eld eld eldk eldk </p>
-          </div>
-        </div>
-
-
-        <div name="message" className='flex-col px-3 py-2 bg-green-300'>
-          <div className='flex flex-row gap-2 items-center'>
-            <div className='h-[40px] w-[40px] rounded-full bg-red-300'></div>
-            <div className='flex flex-col'>
-            <p className='font-medium'>John Smith</p>
-            <p className='text-sm'>03/04/2011</p>
-            </div>
-          </div>
-          <div className='mt-3 text-lg'>
-            <p>Hello My name is Anique elk  klekd dkl ldk eldke dkle dlekd elkd eldke dlke dlekd eldk eldk eldke dlekd eldk eldke dlek dlekd eldk eld eldk eldk eldk eldke dlekd elkd eldk eldk eld eld eldk eldk </p>
-          </div>
-        </div>
-
-
-        <div name="message" className='flex-col px-3 py-2 bg-green-300'>
-          <div className='flex flex-row gap-2 items-center'>
-            <div className='h-[40px] w-[40px] rounded-full bg-red-300'></div>
-            <div className='flex flex-col'>
-            <p className='font-medium'>John Smith</p>
-            <p className='text-sm'>03/04/2011</p>
-            </div>
-          </div>
-          <div className='mt-3 text-lg'>
-            <p>Hello My name is Anique elk  klekd dkl ldk eldke dkle dlekd elkd eldke dlke dlekd eldk eldk eldke dlekd eldk eldke dlek dlekd eldk eld eldk eldk eldk eldke dlekd elkd eldk eldk eld eld eldk eldk </p>
-          </div>
-        </div>
-
-
-        <div name="message" className='flex-col px-3 py-2 bg-green-300'>
-          <div className='flex flex-row gap-2 items-center'>
-            <div className='h-[40px] w-[40px] rounded-full bg-red-300'></div>
-            <div className='flex flex-col'>
-            <p className='font-medium'>John Smith</p>
-            <p className='text-sm'>03/04/2011</p>
-            </div>
-          </div>
-          <div className='mt-3 text-lg'>
-            <p>Hello My name is Anique elk  klekd dkl ldk eldke dkle dlekd elkd eldke dlke dlekd eldk eldk eldke dlekd eldk eldke dlek dlekd eldk eld eldk eldk eldk eldke dlekd elkd eldk eldk eld eld eldk eldk </p>
-          </div>
-        </div>
-
-
-        <div name="message" className='flex-col px-3 py-2 bg-green-300'>
-          <div className='flex flex-row gap-2 items-center'>
-            <div className='h-[40px] w-[40px] rounded-full bg-red-300'></div>
-            <div className='flex flex-col'>
-            <p className='font-medium'>John Smith</p>
-            <p className='text-sm'>03/04/2011</p>
-            </div>
-          </div>
-          <div className='mt-3 text-lg'>
-            <p>Hello My name is Anique elk  klekd dkl ldk eldke dkle dlekd elkd eldke dlke dlekd eldk eldk eldke dlekd eldk eldke dlek dlekd eldk eld eldk eldk eldk eldke dlekd elkd eldk eldk eld eld eldk eldk </p>
-          </div>
-        </div>
-
-
-        <div name="message" className='flex-col px-3 py-2 bg-green-300'>
-          <div className='flex flex-row gap-2 items-center'>
-            <div className='h-[40px] w-[40px] rounded-full bg-red-300'></div>
-            <div className='flex flex-col'>
-            <p className='font-medium'>John Smith</p>
-            <p className='text-sm'>03/04/2011</p>
-            </div>
-          </div>
-          <div className='mt-3 text-lg'>
-            <p>Hello My name is Anique elk  klekd dkl ldk eldke dkle dlekd elkd eldke dlke dlekd eldk eldk eldke dlekd eldk eldke dlek dlekd eldk eld eldk eldk eldk eldke dlekd elkd eldk eldk eld eld eldk eldk </p>
-          </div>
-        </div>
-
-
-      </div>
-      <div className='w-full h-[20%] border border-gray-300 flex flex-row items-center justify-center gap-3 p-[20px]'>
-       <textarea name="" id="" className='w-[90%] h-full border-2 border-gray-200 p-3' cols="30" rows="10"></textarea>
-        <button className='bg-red-300 w-[50px] h-[50px] rounded-full'></button>
-
-
-      </div>
-    </div>
-  </div>
-</div>   
+        <ChatBox user={user}/>
       )
     }
 
 }
   return (
    <div className='bg-blue-400 flex flex-row w-[100vw] overflow-hidden h-screen'>
-    <nav className='w-[18vw] bg-white h-full flex flex-col gap-[100px] px-[20px] py-[50px]'>
+    <nav className='w-[18vw] bg-white h-full flex flex-col gap-[20px] px-[20px] py-[40px] justify-between'>
+      <div className='flex flex-col gap-5'>
       <div className='flex flex-row gap-1 justify-center items-center  '>
       <img src={logo} className='w-[50px] h-[50px]' alt="" />
       <button className='w-[120px] h-[80px] text-2xl text-gray-800 font-bold'>Congen</button>
+      
       </div>
       <div className='flex flex-col  gap-5'>
         <div onClick={()=>{dispatch(setYoungDashboardSlice(0))}} className='flex flex-row items-center gap-3 bg-gray-100 text-black px-[15px] hover:bg-primary hover:cursor-pointer hover:text-white rounded-sm  py-[10px]'>
-        <span className="material-symbols-outlined ">
-        account_circle
-        </span>
+        <FiUser size={20}/>
         <button className=' text-lg'>My Profile</button>
         </div>
 
         <div  onClick={()=>{dispatch(setYoungDashboardSlice(1))}}  className='flex flex-row items-center gap-3 bg-gray-100 px-[15px] rounded-sm hover:bg-primary hover:cursor-pointer hover:text-white py-[10px]'>
-        <span className="material-symbols-outlined ">
-        account_circle
-        </span>
+        <FiUsers size={20} />
         <button className=' text-lg'>Senior's Profiles</button>
         </div>
 
         <div  onClick={()=>{dispatch(setYoungDashboardSlice(2))}}  className='flex flex-row items-center gap-3 bg-gray-100 px-[15px] rounded-sm hover:bg-primary hover:cursor-pointer hover:text-white  py-[10px]'>
-        <span className="material-symbols-outlined ">
-        account_circle
-        </span>
+        <FiMessageSquare size={20} />
         <button className=' text-lg'>Messages</button>
         </div>
+      </div>
+      </div>
+    
+        
 
-
-        <div className='flex flex-row items-center gap-3 bg-gray-100 px-[15px] rounded-sm hover:bg-primary hover:cursor-pointer hover:text-white  py-[10px]'>
-        <span className="material-symbols-outlined ">
-        account_circle
-        </span>
-        <button className=' text-lg'>Sent Requests</button>
-        </div>   
-      </div>     
+       <div onClick={()=>{dispatch(setYoungDashboardSlice(0)); dispatch(setNavigation(0))}} className='flex flex-row items-center gap-3 bg-gray-100 px-[15px] rounded-sm hover:bg-primary hover:cursor-pointer hover:text-white  py-[10px]'>
+       <FiLogOut size={20} />
+        <button   className=' text-lg'>LogOut</button>
+        </div>     
     </nav> 
 
    <Page/>

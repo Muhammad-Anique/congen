@@ -185,7 +185,7 @@ function SignUp() {
 
      
 
-        <button type="submit" className='w-[360px] h-[45px] bg-primary hover:bg-[#66aebd] text-white font-bold text-xl rounded-xl'>Next</button>
+        <button type="submit" className='w-[360px] h-[45px] bg-primary hover:bg-secondary text-primary2 text-xl rounded-sm'>Next</button>
       </form>) : ( <ActivitySelector setFormData={setFormData} isYoung={isYoung} isOld={isOld} Data={formData} page={setpage}/>)
       }
   
