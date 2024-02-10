@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import supabase from '../config/supabaseClient'
 import { useSelector } from 'react-redux'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import '../Assets/Spinner/spinner.css'
 
 function SeniorProfiles(props) {
 
@@ -127,25 +131,70 @@ function SeniorProfiles(props) {
    
   const SeniorProfileCard = (props) => {
     const {id, name, email, type, activity } = props.oldProfile;
-    async function handleChat(){
-      try {        
-        const { data, error } = await supabase
-        .from('conversation')
-        .insert([
-          { participant1: props.myProfile.id, participant2: id, unReadCount: 0},
-        ])
-        .select()    
-        if(data){
-          console.log("COnversation Created => ", data)
-        }
-        if(error){
-        console.log(error)
-        }
+    const [isloading,setIsloading] =useState(false)
+    
+    const handleSuccess = (msg) => {
+      toast.success(msg, {
+        position: "top-right",
+        autoClose: 3000, // Close the notification after 3 seconds
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    };
+
+    const handleFailure = (msg) => {
+      toast.error(msg, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    };
+
+     async function handleChat(){
+      console.log("Chat Clicked")
+      setIsloading(true)
+      try {     
+          const { data, error } = await supabase
+          .from('conversation')
+          .select('*')
+          .filter('participant1', 'in', `(${props.myProfile.id},${id})`)
+          .filter('participant2', 'in', `(${props.myProfile.id},${id})`)
+          if (error) {
+              setIsloading(false)
+          } else if(data) {
+              if (data && data.length > 0) {
+                setIsloading(false)
+                handleSuccess('Msg Already sent')
+                console.log('Conversation already exists:', data);
+              } else {
+                  // Conversation does not exist, proceed with insertion
+                  const insertResult = await supabase
+                      .from('conversation')
+                      .insert([{ participant1: props.myProfile.id, participant2: id, unReadCount: 0 }]);
+                  if (insertResult.error) {
+                      setIsloading(false)
+                  } else {
+                    handleSuccess('Your msg has been sent')
+                    setIsloading(false)
+                      console.log('Conversation inserted successfully:', insertResult.data);
+                  }
+              }
+          }   
+        
       } catch (error) {
         console.log(error)
+        setIsloading(false)
         
       }
     }
+
 
     return (
       <div className='bg-white rounded-xl w-[360px] h-[260px] shadow-md flex gap-2 p-6 py-[30px] flex-col justify-center'>
@@ -166,7 +215,6 @@ function SeniorProfiles(props) {
   
         <div className='flex flex-row justify-between px-3 items-center mt-2'>
           <button onClick={()=>{handleChat()}} className='bg-primary p-2 w-[100px] text-white rounded-full hover:bg-secondary'>Chat</button>
-          <p className='font-bold text-3xl text-primary2'>$13.00/-</p>
         </div>
       </div>
     );
@@ -187,6 +235,7 @@ function SeniorProfiles(props) {
     ) : (
       <h1>No Match Found</h1>
     )}
+      <ToastContainer />
   </div>
   )
 }

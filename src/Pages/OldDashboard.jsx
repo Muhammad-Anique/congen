@@ -12,9 +12,16 @@ import { FiUser } from "react-icons/fi";
 import { FiUsers } from "react-icons/fi";
 import { setOldDashboardSlice } from '../store/slices/oldDashboardSlice'
 import { setNavigation } from '../store/slices/navigationSlice'
+import supabase from '../config/supabaseClient'
+
+
+
+
 
 function OldDashboard() {
   const dispatch = useDispatch()
+  const [user, setUser] =useState(useSelector((state)=>{ return state.user.data }))
+
 
   function Page(){
     const data = useSelector((state)=>{ return state.oldDashboard.data })
@@ -242,7 +249,35 @@ function OldDashboard() {
       )
     }
 
-}
+
+
+
+  }
+
+  
+
+  const updateUser = async (userId) => {
+    const now = new Date();
+    console.log("Now; ",now)
+    const lastSeenTimestamp = now.toISOString();
+
+    console.log("The id = >", userId)
+    const { data, error } = await supabase
+    .from('user')
+    .update({ isOnline: false ,lastSeen:now})
+    .eq('id', userId)
+    .select()
+    .single()
+    if(data){
+      console.log("Updated : ", data)
+      return data
+    }
+    if(error){
+      console.log(error)
+      return null
+    }    
+  };
+
   return (
    <div className='bg-blue-400 flex flex-row w-[100vw] overflow-hidden h-screen'>
     <nav className='w-[18vw] bg-white h-full flex flex-col gap-[20px] px-[20px] py-[40px] justify-between'>
@@ -271,7 +306,7 @@ function OldDashboard() {
       </div>
       </div>
     
-       <div onClick={()=>{dispatch(setOldDashboardSlice(0)); dispatch(setNavigation(0))}}  className='flex flex-row items-center gap-3 bg-gray-100 px-[15px] rounded-sm hover:bg-primary hover:cursor-pointer hover:text-white  py-[10px]'>
+       <div onClick={()=>{dispatch(setOldDashboardSlice(0)); dispatch(setNavigation(0)); updateUser(user.id)}}  className='flex flex-row items-center gap-3 bg-gray-100 px-[15px] rounded-sm hover:bg-primary hover:cursor-pointer hover:text-white  py-[10px]'>
        <FiLogOut size={20} />
         <button   className=' text-lg'>LogOut</button>
         </div>     

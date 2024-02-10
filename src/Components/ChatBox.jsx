@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import supabase from '../config/supabaseClient'
 import Message from './Message';
@@ -57,6 +57,8 @@ function ConversationComponent(props) {
 function ChatBox(props) {
 
 
+
+
   const [isloading, setIsloading] =useState(false)
 
   //All conversations
@@ -72,6 +74,34 @@ function ChatBox(props) {
   //Sender
   //Messages
   const [messages, setMessages]= useState(null)
+  //typedMessage
+  const [typedMessage, setTypedMessage] = useState('')
+
+
+  async function sendMessage(convId, senderId){  
+
+    console.log("Type: ", typedMessage)
+    console.log("active conv ", activeConversation)
+    console.log("send", senderId)
+
+    const { data, error } = await supabase
+    .from('message')
+    .insert([
+      { messageContent: typedMessage,senderId:senderId,conversationId: convId  },
+    ])
+    .select()
+    .single()
+    if(error){
+      console.log("Error", error)
+
+    }
+
+    if(data){
+      console.log("Data Inserted of Message", data)
+      setTypedMessage('')
+      setMessages(prevMessages => [...prevMessages, data]);
+    }
+  }
 
 
   useEffect(() => {
@@ -109,8 +139,22 @@ function ChatBox(props) {
       if(error)
       console.log(error)
     }
+  
+    if(openConversation){
+      if(openConversation.participant1_id!==props.user.id){
+        getreceiver(openConversation.participant1_id)
+      }
+      else if(openConversation.participant2_id!==props.user.id){
+        getreceiver(openConversation.participant2_id)
+      }
+     
+    }
+  },[openConversation])
 
 
+
+  useEffect(() => {
+    
     async function getMessages(conversationId){
       const {data, error} = await supabase
       .from('message')
@@ -125,26 +169,16 @@ function ChatBox(props) {
       if(error)
       console.log(error)
     }
-
-  
-    if(openConversation){
-      if(openConversation.participant1_id!==props.user.id){
-        getreceiver(openConversation.participant1_id)
-      }
-      else if(openConversation.participant2_id!==props.user.id){
-        getreceiver(openConversation.participant2_id)
-      }
-
-
-      getMessages(openConversation.conversation_id)
-
+    
+    if (openConversation) {
+      getMessages(openConversation.conversation_id);
+      const interval = setInterval(() => {
+        getMessages(openConversation.conversation_id);
+      }, 5000); // Fetch messages every 5 seconds
+      return () => clearInterval(interval);
     }
+  }, [openConversation]);
 
-
-  
-
-
-  },[openConversation])
 
   useEffect(()=>{
     console.log("active conv : = ", activeConversation)
@@ -173,8 +207,6 @@ function ChatBox(props) {
                 `*`
             )
             .or(`participant2_id.eq.${userId},participant1_id.eq.${userId}`)
-            
-    
         if (error) {
             console.error('Error fetching conversations:', error.message);
             return null;
@@ -200,6 +232,18 @@ function ChatBox(props) {
   useEffect(()=>{
     console.log("States = > ", convState)
   },[convState])
+
+
+  
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   function getLastSeen(timestamp){
     const lastSeen = new Date(timestamp); // Convert timestamp to a Date object
@@ -242,7 +286,16 @@ function ChatBox(props) {
               />
             ))}
 
-            {!conversation || conversation.length <= 0  ? 
+
+        {!conversation   ? 
+                    (<div className=' w-full bg-white flex items-center flex-col justify-center h-full'>
+                      <div className='loader'></div>
+                     
+                      
+                    </div>) :''}
+
+
+            {conversation && conversation.length <= 0  ? 
             (<div className='w-full bg-white flex items-center flex-col justify-center h-full'>
               <PiSmileyLight size={70} />
               <h1 className='text-xl text-center'>No Conversation <br /> Initiated</h1>
@@ -279,8 +332,6 @@ function ChatBox(props) {
         </div>
       </div>
       <div className='w-full h-[67%] p-2 flex flex-col gap-2 overflow-y-auto'>
-
-
       {messages ? (
         messages.map((message, index) => (
           <Message key={index} message={message} user={props.user} receiver={receiver} />
@@ -288,6 +339,7 @@ function ChatBox(props) {
       ) : (
         <div className="loader"></div>
       )}
+      <div ref={messagesEndRef} />
             
 
 
@@ -295,11 +347,11 @@ function ChatBox(props) {
 
       </div>
       <div className='w-full h-[20%] border-t-2 border-t-gray-100 flex flex-row items-center justify-center gap-3 p-[20px]'>
-       <textarea name="" id="" className='w-[90%] h-full rounded-lg border-2 border-gray-200 p-3' cols="30" rows="10" placeholder='Type...'></textarea>
-        <button className='bg-primary hover:bg-secondary w-[50px] h-[50px] rounded-full flex justify-center items-center'>
+       <textarea value={typedMessage} onChange={(e)=>{setTypedMessage(e.target.value)}}  name=""  id=""  className='w-[90%] h-full rounded-lg border-2 border-gray-200 p-3' cols="30" rows="10" placeholder='Type...'></textarea>
+        <button onClick={()=>{sendMessage(activeConversation, props.user.id)}} className='bg-primary hover:bg-secondary w-[50px] h-[50px] rounded-full flex justify-center items-center'>
         <span class="material-symbols-outlined text-white text-3xl ">
             send
-            </span>
+        </span>
         </button>
       </div>
     </div>

@@ -58,7 +58,7 @@ function Login() {
     console.log("The id = >", userId)
     const { data, error } = await supabase
     .from('user')
-    .update({ isOnline: true ,lastSeen:now})
+    .update({ isOnline: true })
     .eq('id', userId)
     .select()
     .single()
