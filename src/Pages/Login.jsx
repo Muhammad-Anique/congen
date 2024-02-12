@@ -74,32 +74,36 @@ function Login() {
 
   async function handleLogin() {
     if (email && password) {
-      const formData = {
-        email: email,
-        password: password,
-      };
-      try {  
-        const { data, error } = await supabase
-          .from('user')
-          .select('*')
-          .eq('email', email)
-          .eq('password', password)
-          .single(); // Assuming email is unique
-      
+      try { 
+        let { data, error } = await supabase.auth.signInWithPassword({
+          email: email,
+          password: password
+        }) 
         if (error) {
           handleFailure("User Not Exist or Network Error");
           console.error('Supabase error:', error);
         } else if (data) {
           console.log("User found:", data);
-          const up = await updateUser(data.id)
-          console.log("Up", up)
-          dispatch(setUser(up))
-          if(up.isYoung){
-            dispatch(setNavigation(2))
-          }else if(up.isOld){
-            dispatch(setNavigation(3))
+          const userR = await supabase
+          .from('user')
+          .select('*')
+          .eq('uuid', data.user.id)
+          .single(); // Assuming email is unique
+          if(userR.data){
+            const up = await updateUser(userR.data.id)
+            console.log("Up", up)
+            dispatch(setUser(up))
+            if(up.isYoung){
+              dispatch(setNavigation(2))
+            }else if(up.isOld){
+              dispatch(setNavigation(3))
+            }
           }
-         
+
+          if(userR.error){
+            handleFailure("User not found or network error")
+
+          }
         } else {
           handleFailure("No user found with the provided credentials");
         }
@@ -114,7 +118,7 @@ function Login() {
 
   return (
     <div className='w-full h-full bg-[#ffffff] flex flex-row justify-center items-center '>
-    <div className='w-[40%] h-full bg-white flex flex-col justify-center items-center gap-[40px]'>
+    <div className='w-[40%] h-full bg-white flex flex-col justify-center items-center gap-[30px]'>
       <div className='flex flex-col justify-center items-center gap-3'>
       <img src={logo} className='h-[120px] w-[120px]' alt="" />
       <p  className='text-[#4b4b4b] w-[300px] leading-[20px] text-center '>Put your credential to login to congen organization and get connected</p>
@@ -126,7 +130,12 @@ function Login() {
       <button onClick={()=>{handleLogin()}} className='w-[360px] h-[45px] bg-primary hover:bg-secondary text-primary2  text-xl rounded-sm'>Login</button>
       </div>
       <div className='w-[50%] h-[1.5px] bg-[#ededed]'></div>
+    
+      <div className='flex flex-col justify-center items-center'>
       <p className='text-lg'>Don't have an account? <button  onClick={()=>{dispatch(setNavigation(1))}} className='text-primary font-bold mt-[10px]'>SignUp</button> </p>
+      <p className='text-lg'>Forgot password? <button className='text-primary font-bold mt-[10px]'>Click Here</button> </p>
+      </div>
+    
     </div>
     <div className='relative w-[60%] h-full overflow-hidden'>
       <img src={img1} className='h-screen object-cover' alt="" />

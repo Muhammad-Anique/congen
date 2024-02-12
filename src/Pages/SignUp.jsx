@@ -6,9 +6,12 @@ import Field from '../UI/Field';
 import ActivitySelector from '../Components/ActivitySelector';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch } from 'react-redux';
+import { setNavigation } from '../store/slices/navigationSlice';
 
 
 function SignUp() {
+  const dispatch = useDispatch()
   const [page, setpage] =useState(0)
   const [isYoung, setisYoung] = useState(false);
   const [isOld, setisOld] = useState(false);
@@ -125,6 +128,13 @@ function SignUp() {
       return;
     }
 
+
+    if (!isYoung && !isOld) {
+      console.error('Invalid contact number for Italy');
+      handleFailure("Select Young or Old")
+      return;
+
+    }
     console.log(formData, isYoung, isOld)
     setpage(1)
 
@@ -189,11 +199,8 @@ function SignUp() {
       </form>) : ( <ActivitySelector setFormData={setFormData} isYoung={isYoung} isOld={isOld} Data={formData} page={setpage}/>)
       }
   
-    
-
-   
-
-  
+     
+    <p className='text-lg'>Already have an account? <button  onClick={()=>{dispatch(setNavigation(0))}} className='text-primary font-bold mt-[10px]'>login</button> </p>
     {/* <div className='w-[50%] h-[1.5px] bg-[#ededed]'></div> */}
       {/* <p className='text-lg'>Already have an account? <Link className='text-primary font-bold mt-[10px]'>Login</Link> </p> */}
     </div>

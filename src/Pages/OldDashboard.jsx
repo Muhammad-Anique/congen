@@ -14,8 +14,8 @@ import { setOldDashboardSlice } from '../store/slices/oldDashboardSlice'
 import { setNavigation } from '../store/slices/navigationSlice'
 import supabase from '../config/supabaseClient'
 
-
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function OldDashboard() {
@@ -24,6 +24,34 @@ function OldDashboard() {
 
 
   function Page(){
+
+    const [isloading, setIsloading] =useState(false)
+    
+  const handleSuccess = (msg) => {
+    toast.success(msg, {
+      position: "top-right",
+      autoClose: 3000, // Close the notification after 3 seconds
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  const handleFailure = (msg) => {
+    toast.error(msg, {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+
     const data = useSelector((state)=>{ return state.oldDashboard.data })
     const [activity, setActivity] = useState({
       "Indoor": {
@@ -63,8 +91,6 @@ function OldDashboard() {
       }
     })
 
-
-
     const [user, setUser] =useState(useSelector((state)=>{ return state.user.data }))
 
     const handleRatingChange = (type, index) => {
@@ -99,12 +125,53 @@ function OldDashboard() {
     },[activity])
    
     console.log("data " ,data);
+
+    
+  function getTrueRatingIndex(activity) {
+    const index = activity.rating.findIndex(value => value === true);
+    return index !== -1 ? index + 1 : null; // Adding 1 to match the index in your array
+  }
+
+  async function  updateProfile(){
+
+    setIsloading(true)
+    const Indoor_ = activity.Indoor;
+    const Outdoor_ = activity.Outdoor;
+    const Remote_ = activity.Remote;
+    const IndoorActivities = Indoor_.preferredActivities[0]
+    const OutdoorActivities = Outdoor_.preferredActivities[0]
+    const RemoteActivities  = Remote_.preferredActivities[0]
+    const Indoor = getTrueRatingIndex(Indoor_);
+    const Outdoor = getTrueRatingIndex(Outdoor_);
+    const Remote = getTrueRatingIndex(Remote_);
+
+    
+    const { data, error } = await supabase
+    .from('user')
+    .update({ Indoor:Indoor,Outdoor:Outdoor, Remote:Remote, IndoorActivities: IndoorActivities,
+      OutdoorActivities:OutdoorActivities,RemoteActivities:RemoteActivities})
+    .eq('id', user.id)
+    .select()
+
+    if(data){
+      setIsloading(false)
+      handleSuccess("profile updated")
+      console.log("Profile Update  = > ", data)
+    }
+
+    if(error){
+      setIsloading(false)
+      handleFailure("Profile is not updated")
+      console.log("Profile cannot be updated")
+    }
+          
+  }
     if(data==0){
       return(
         <div className='w-[82vw] bg-gray-100 p-[50px] flex flex-col gap-10'>
         <div className='flex flex-row justify-between items-center'>
         <h1 className='text-4xl font-bold '>My Profile</h1>
-        <div className='w-[240px] px-[15px] py-[10px] h-[40px] bg-white rounded-full flex items-center justify-center'>
+        <div className=' w-auto px-[15px] py-[10px] h-[40px] bg-white rounded-full flex items-center justify-center'>
           <p className='font-medium'>{user.email}</p>
         </div>
         <h1 className='font-bold'>{user.name}</h1>
@@ -222,8 +289,10 @@ function OldDashboard() {
         </div>
 
 
-
+        { isloading  ? (<div className='loader'></div> ) : (      <button  onClick={()=>{updateProfile()}} className='w-[260px] h-[50px] bg-primary rounded-lg hover:bg-secondary text-primary2 text-xl self-center'>Update Profile</button>
+       )}    
       </div>
+      <ToastContainer />
     </div>          
       )
     }
@@ -233,7 +302,7 @@ function OldDashboard() {
         <div className='w-[82vw] bg-gray-100 p-[50px] flex flex-col gap-10'>
         <div className='flex flex-row justify-between items-center'>
         <h1 className='text-4xl font-bold '>Junior Profiles</h1>
-        <div className='w-[240px] px-[15px] py-[10px] h-[40px] bg-white rounded-full flex items-center justify-center'>
+        <div className='min-w-[240px] w-auto px-[15px] py-[10px] h-[40px] bg-white rounded-full flex items-center justify-center'>
           <p className='font-medium'>{user.email}</p>
         </div>
         <h1 className='font-bold'>{user.name}</h1>
@@ -260,7 +329,6 @@ function OldDashboard() {
     const now = new Date();
     console.log("Now; ",now)
     const lastSeenTimestamp = now.toISOString();
-
     console.log("The id = >", userId)
     const { data, error } = await supabase
     .from('user')
@@ -270,6 +338,7 @@ function OldDashboard() {
     .single()
     if(data){
       console.log("Updated : ", data)
+      let { error } = await supabase.auth.signOut()
       return data
     }
     if(error){

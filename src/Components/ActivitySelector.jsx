@@ -8,7 +8,10 @@ import { useDispatch } from 'react-redux';
 import { setNavigation } from '../store/slices/navigationSlice';
 
 
+import '../Assets/Spinner/spinner.css'
+
 function ActivitySelector(props) {
+  const [isloading, setIsloading] =useState(false)
   const dispatch =useDispatch()
   const navigate = useNavigate()
   const handleSuccess = (msg) => {
@@ -106,9 +109,8 @@ function ActivitySelector(props) {
   }
 
   
-  const handleSubmit = async (e) => {
-   
-
+  const handleSubmit = async (e) => {   
+    setIsloading(true)
     try {
       // Make POST request to API
       const requestBody = {
@@ -138,52 +140,39 @@ function ActivitySelector(props) {
       const Outdoor = getTrueRatingIndex(Outdoor_);
       const Remote = getTrueRatingIndex(Remote_);
 
-      // console.log(
-      //   "Name:", name,
-      //   "Email:", email,
-      //   "Password:", password,
-      //   "Contact:", contactNo,
-      //   "Date of Birth:", dob,
-      //   "Is Young:", isYoung,
-      //   "Is Old:", isOld,
-      //   "Indoor Activity:", Indoor,
-      //   "Outdoor Activity:", Outdoor,
-      //   "Remote Activity:", Remote,
-      //   "Preferred Indoor Activity:", IndoorAct,
-      //   "Preferred Outdoor Activity:", OutdoorAct,
-      //   "Preferred Remote Activity:", RemoteAct,
-      //   "Indoor Index:", indoorIndex,
-      //   "Outdoor Index:", outdoorIndex,
-      //   "Remote Index:", remoteIndex
-      // );
-      
+         
+    let { data, error } = await supabase.auth.signUp({
+      email: email,
+      password: password
+    })
 
-       
-     
-      const { data, error } = await supabase
+    if(data){
+      const uuid = data.user.id
+      const userAdded = await supabase
       .from('user')
       .insert([
-        {name:name,email:email, password:password,isYoung:isYoung, isOld: isOld,contact:contactNo,dob:dob,Indoor:Indoor,Outdoor:Outdoor,
+        {uuid: uuid , name:name,email:email,isYoung:isYoung, isOld: isOld,contact:contactNo,dob:dob,Indoor:Indoor,Outdoor:Outdoor,
            Remote:Remote, IndoorActivities: IndoorActivities,OutdoorActivities:OutdoorActivities,RemoteActivities:RemoteActivities},
       ])
-      .select()
-      
-    
-      if(data){
+      .select() 
+      if(userAdded.data){
         console.log(data)
-        handleSuccess("Registered Successfully")
+        handleSuccess("Verification email has sent")
+        setIsloading(false)
         setTimeout(() => {
           dispatch(setNavigation(0))
         }, 1000);
 
       }
-      if(error){
+      if(userAdded.error){
         console.log(error)
         handleFailure("SignUp Failed")
-
+        setIsloading(false)
       }
-
+    }
+    console.log(data)
     } catch (error) {
+      setIsloading(false)
       console.error('Error submitting form:', error.message);
       alert('Failed to submit form. Please try again.');
     }
@@ -254,7 +243,10 @@ function ActivitySelector(props) {
           ))}
         </div>
         <div className='flex flex-row justify-between gap-3'>
-        <button onClick={()=>{handleSubmit()}} className='w-full h-[45px] mt-[24px] bg-primary hover:bg-[#66aebd] text-white font-bold text-xl rounded-xl'>SignUp</button>
+        {
+          isloading ? (<div className='loader'></div>) : (<button onClick={()=>{handleSubmit()}} className='w-full h-[45px] mt-[24px] bg-primary hover:bg-[#66aebd] text-white font-bold text-xl rounded-xl'>SignUp</button>
+          ) 
+        }
         </div>
         
     <ToastContainer />

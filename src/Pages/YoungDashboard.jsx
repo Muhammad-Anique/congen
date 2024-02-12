@@ -7,20 +7,45 @@ import ChatBox from '../Components/ChatBox'
 import { FiMessageSquare } from "react-icons/fi";
 import { FiLogOut } from "react-icons/fi";
 import { FiUser } from "react-icons/fi";
-
 import SeniorProfiles from '../Components/SeniorProfiles'
 import { FiUsers } from "react-icons/fi";
 import { setNavigation } from '../store/slices/navigationSlice'
 import supabase from '../config/supabaseClient'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
+import '../Assets/Spinner/spinner.css'
 
 function YoungDashboard() {
   const dispatch = useDispatch()
   const [user, setUser] =useState(useSelector((state)=>{ return state.user.data }))
-
-
   function Page(){
     const data = useSelector((state)=>{ return state.youngDashboard.data })
+    const [isloading, setIsloading] =useState(false)
+    
+  const handleSuccess = (msg) => {
+    toast.success(msg, {
+      position: "top-right",
+      autoClose: 3000, // Close the notification after 3 seconds
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  const handleFailure = (msg) => {
+    toast.error(msg, {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
     const [activity, setActivity] = useState({
       "Indoor": {
         "rating":[false, false, false],
@@ -102,12 +127,59 @@ function YoungDashboard() {
 
    
     console.log("data " ,data);
+
+
+    
+
+  function getTrueRatingIndex(activity) {
+    const index = activity.rating.findIndex(value => value === true);
+    return index !== -1 ? index + 1 : null; // Adding 1 to match the index in your array
+  }
+
+  async function  updateProfile(){
+
+    setIsloading(true)
+    const Indoor_ = activity.Indoor;
+    const Outdoor_ = activity.Outdoor;
+    const Remote_ = activity.Remote;
+    const IndoorActivities = Indoor_.preferredActivities[0]
+    const OutdoorActivities = Outdoor_.preferredActivities[0]
+    const RemoteActivities  = Remote_.preferredActivities[0]
+    const Indoor = getTrueRatingIndex(Indoor_);
+    const Outdoor = getTrueRatingIndex(Outdoor_);
+    const Remote = getTrueRatingIndex(Remote_);
+
+    
+    const { data, error } = await supabase
+    .from('user')
+    .update({ Indoor:Indoor,Outdoor:Outdoor, Remote:Remote, IndoorActivities: IndoorActivities,
+      OutdoorActivities:OutdoorActivities,RemoteActivities:RemoteActivities})
+    .eq('id', user.id)
+    .select()
+
+    if(data){
+      setIsloading(false)
+      handleSuccess("profile updated")
+      console.log("Profile Update  = > ", data)
+    }
+
+    if(error){
+      setIsloading(false)
+      handleFailure("Profile is not updated")
+      console.log("Profile cannot be updated",error)
+    }
+            
+
+  }
+
+
+
     if(data==0){
       return(
         <div className='w-[82vw] bg-gray-100 p-[50px] flex flex-col gap-10'>
         <div className='flex flex-row justify-between items-center'>
         <h1 className='text-4xl font-bold '>My Profile</h1>
-        <div className='w-[240px] px-[15px] py-[10px] h-[40px] bg-white rounded-full flex items-center justify-center'>
+        <div className=' w-auto px-[15px] py-[10px] h-[40px] bg-white rounded-full flex items-center justify-center'>
           <p className='font-medium'>{user.email}</p>
         </div>
         <h1 className='font-bold'>{user.name}</h1>
@@ -224,9 +296,12 @@ function YoungDashboard() {
           </div>
         </div>
 
-
+        { isloading  ? (<div className='loader'></div> ) : (      <button  onClick={()=>{updateProfile()}} className='w-[260px] h-[50px] bg-primary rounded-lg hover:bg-secondary text-primary2 text-xl self-center'>Update Profile</button>
+       )}
 
       </div>
+     
+      <ToastContainer />
     </div>          
       )
     }
@@ -236,7 +311,7 @@ function YoungDashboard() {
         <div className='w-[82vw] bg-gray-100 p-[50px] flex flex-col gap-10'>
         <div className='flex flex-row justify-between items-center'>
         <h1 className='text-4xl font-bold '>Senior Profile</h1>
-        <div className='w-[240px] px-[15px] py-[10px] h-[40px] bg-white rounded-full flex items-center justify-center'>
+        <div className='min-w-[240px] w-auto px-[15px] py-[10px] h-[40px] bg-white rounded-full flex items-center justify-center'>
           <p className='font-medium'>{user.email}</p>
         </div>
         <h1 className='font-bold'>{user.name}</h1>
@@ -268,6 +343,7 @@ function YoungDashboard() {
     .single()
     if(data){
       console.log("Updated : ", data)
+      let { error } = await supabase.auth.signOut()
       return data
     }
     if(error){
