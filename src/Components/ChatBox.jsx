@@ -207,6 +207,8 @@ function ChatBox(props) {
                 `*`
             )
             .or(`participant2_id.eq.${userId},participant1_id.eq.${userId}`)
+            .neq('status', 'rejected')
+
         if (error) {
             console.error('Error fetching conversations:', error.message);
             return null;

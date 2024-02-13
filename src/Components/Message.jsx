@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import supabase from '../config/supabaseClient';
 
 
 function Message(props) {
+
+
 
     const { message, user, receiver } = props;
     const [activityFound, setActivityFound] =useState(false)
@@ -77,12 +80,35 @@ function Message(props) {
          <p className=' text-primary2'>{activity}</p>
         </div>
         {
-          props.convStatus === "pending" ? (
+          props.convStatus == "pending" && message.senderId!==props.user.id ? (
             <div className='flex flex-col gap-2'>
-            <button className='rounded-lg  bg-red-500 text-white px-4 py-1' >Reject</button>
-            <button className='rounded-lg bg-green-500 text-white px-4 py-1' >Accept</button>
+            <button onClick={async()=>{
+                     
+            const { data, error } = await supabase
+            .from('conversation')
+            .update({ status: 'rejected' })
+            .eq('id', props.message.conversationId)
+            .select()
+            if(data){
+              alert("Request Rejected Successfully")
+            }
+        
+            }} className='rounded-lg  bg-red-500 text-white px-4 py-1' >Reject</button>
+            <button onClick={async()=>{
+            const { data, error } = await supabase
+            .from('conversation')
+            .update({ status: 'active' })
+            .eq('id', props.message.conversationId)
+            .select()
+            if(data){
+              alert("Request Accepted Successfully")
+            }
+
+            }} className='rounded-lg bg-green-500 text-white px-4 py-1' >Accept</button>
           </div>
-          ) : (<></>)
+          ) : (
+            props.convStatus == "pending" && message.senderId===props.user.id ? ( <h1 className='font-bold mr-2 border-2 p-2 rounded-lg'>Request Pending</h1> ) : ( <></>)
+          )
         }
        
        

@@ -6,7 +6,6 @@ function MyProfile(props) {
     const [changing, setChanging] =useState(false)
     const [isloading, setIsloading] =useState(false) 
     const [newPassword, setNewPassword] =useState(null)
-    const [Visible, setIsVisible] =useState(false)
     async function updateUser(email, newPassword) {
         setIsloading(true)
         try {
