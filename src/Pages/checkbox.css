@@ -10,7 +10,7 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     outline: none;
-    border: 2px solid #85d0df; /* Green color */
+    border: 2px solid #0097a8; /* Green color */
     border-radius: 4px;
     position: relative;
     cursor: pointer;
@@ -19,7 +19,7 @@
   .checkbox-wrapper input[type="checkbox"]:checked::after {
     content: '\2714'; /* Checkmark symbol */
     font-size: 16px; /* Adjust size as needed */
-    color: #85d0df; /* Green color */
+    color: #0097a8; /* Green color */
     position: absolute;
     top: 50%;
     left: 50%;
@@ -41,7 +41,7 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     outline: none;
-    border: 2px solid #85d0df; /* Color #85d0df */
+    border: 2px solid #0097a8; /* Color #85d0df */
     border-radius: 50%; /* Makes the radio button circular */
     position: relative;
     cursor: pointer;
@@ -51,7 +51,7 @@
     content: ''; /* Creates the inner circle indicating selection */
     width: 10px; /* Adjust size as needed */
     height: 10px; /* Adjust size as needed */
-    background-color: #85d0df; /* Color #85d0df */
+    background-color: #0097a8; /* Color #85d0df */
     border-radius: 50%; /* Makes the inner circle circular */
     position: absolute;
     top: 50%;

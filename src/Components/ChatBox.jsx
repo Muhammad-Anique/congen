@@ -299,7 +299,7 @@ function ChatBox(props) {
             (<div className='w-full bg-white flex items-center flex-col justify-center h-full'>
               <PiSmileyLight size={70} />
               <h1 className='text-xl text-center'>No Conversation <br /> Initiated</h1>
-              <p className='text-center mt-4 px-[40px]'>To initiate a conversation, go to senior's profile and chat with a senior</p>
+              <p className='text-center mt-4 px-[40px]'>To initiate a conversation, go to people's profile and chat with a desired person</p>
               
             </div>) :''}
         </div>
@@ -334,7 +334,7 @@ function ChatBox(props) {
       <div className='w-full h-[67%] p-2 flex flex-col gap-2 overflow-y-auto'>
       {messages ? (
         messages.map((message, index) => (
-          <Message key={index} message={message} user={props.user} receiver={receiver} />
+          <Message key={index} message={message} user={props.user} receiver={receiver} convStatus={openConversation.status} />
         ))
       ) : (
         <div className="loader"></div>

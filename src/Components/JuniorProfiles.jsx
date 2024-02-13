@@ -9,113 +9,125 @@ import '../Assets/Spinner/spinner.css'
 function JuniorProfiles(props) {
 
 
-    const [youngProfiles, setYoungProfiles] =useState(null)
-    const [myDesiredActivity, setMyDesiredAcitivty] =useState(null)
+    const [youngProfiles, setYoungProfiles] =useState([])
+    const [myDesiredActivities, setMyDesiredActivities] = useState([]);
     const [juniorProfilesArray, setJuniorProfilesArray] =useState([])
 
-   useEffect(()=>{
-    function highestRating(indoor, outdoor, remote) {
-        console.log("Ratings : ", indoor, outdoor, remote)
+    useEffect(() => {
+      function highestRating(indoor, outdoor, remote) {
+        console.log("Ratings : ", indoor, outdoor, remote);
+        const activities = [];
         const smallest = Math.min(indoor, outdoor, remote);
-        if (smallest === indoor) {
-            return "Indoor";
-        } else if (smallest === outdoor) {
-            return "Outdoor";
-        } else {
-            return "Remote";
+        if (smallest === indoor && indoor <= 2 ) {
+            activities.push("Indoor");
         }
+        if (smallest === outdoor && outdoor <= 2 ) {
+            activities.push("Outdoor");
+        }
+        if (smallest === remote && remote <= 2 ) {
+            activities.push("Remote");
+        }
+        if (activities.length === 0) {
+            activities.push("Indoor", "Outdoor", "Remote");
+        }
+        console.log("Activ :  -", activities)
+        return activities;
     }
 
-    const DesiredActivity = highestRating(props.user.Indoor, props.user.Outdoor, props.user.Remote)
-    console.log("MyDesire :",DesiredActivity)
-    setMyDesiredAcitivty(DesiredActivity)
-   },[])
+
+      const DesiredActivities = highestRating(props.user.Indoor, props.user.Outdoor, props.user.Remote);
+      console.log("MyDesire :", DesiredActivities);
+      setMyDesiredActivities(DesiredActivities);
+  }, [props.user]);
 
 
-   useEffect(()=>{
-    async function getYoung(activity, value){
-        const {data, error} =await supabase
-        .from('user')
-        .select('*')
-        .eq('isYoung', true)
-        .lte(activity, value)
-        .neq('id',props.user.id)
-        if(data){
-             console.log(data)
-             setYoungProfiles(data)
-        }
-        if(error){
-            console.log(error)
-        }
+  useEffect(() => {
+    async function getYoung(activity, value) {
+        const { data, error } = await supabase
+            .from('user')
+            .select('*')
+            .eq('isYoung', true)
+            .lte(activity, value)
+            .neq('id', props.user.id);
+        return { data, error };
     }
 
-    if(myDesiredActivity==="Indoor"){
-      getYoung("Indoor",props.user.Indoor)      
-    }else if(myDesiredActivity==="Outdoor"){
-      getYoung("Outdoor",props.user.Outdoor)
-    }else if(myDesiredActivity==="Remote"){
-      getYoung("Remote",props.user.Remote)
+    async function fetchData() {
+        const promises = myDesiredActivities.map(activity => {
+            if (activity === "Indoor") {
+                return getYoung("Indoor", props.user.Indoor);
+            } else if (activity === "Outdoor") {
+                return getYoung("Outdoor", props.user.Outdoor);
+            } else if (activity === "Remote") {
+                return getYoung("Remote", props.user.Remote);
+            }
+        });
+
+        const results = await Promise.all(promises);
+        results.forEach(({ data, error }) => {
+            if (data) {
+                console.log(data);
+                setYoungProfiles(youngProfiles => [...youngProfiles, ...data]); // Append fetched profiles to existing state
+            }
+            if (error) {
+                console.log(error);
+            }
+        });
     }
 
-   },[myDesiredActivity])
+    fetchData();
+}, [myDesiredActivities]);
 
 
 
-   useEffect(()=>{
-    if(youngProfiles)
-    {
-        console.log("Young Profiles ==> ", youngProfiles)
-        if(myDesiredActivity){
-        
-        if(myDesiredActivity=="Indoor"){
-            console.log("Inside Activity")
-            youngProfiles.forEach(profile => {
-                for (const activity in profile.IndoorActivities) {
-                    if (profile.IndoorActivities[activity]) {
-                        console.log("For ", activity);
-                        setJuniorProfilesArray(prevProfiles => [
-                            ...prevProfiles,
-                            { id:profile.id,name: profile.name, email: profile.email, type: "Indoor", activity: activity}
-                        ]);       
-                    }
-                }
-            });
-        }
-        else if(myDesiredActivity=="Outdoor"){
-          console.log("Inside Activity")
-          youngProfiles.forEach(profile => {
-              for (const activity in profile.OutdoorActivities) {
-                  if (profile.OutdoorActivities[activity]) {
-                      console.log("For ", activity);
-                      setJuniorProfilesArray(prevProfiles => [
-                          ...prevProfiles,
-                          { id:profile.id, name: profile.name, email: profile.email, type: "Outdoor", activity: activity }
-                      ]);       
+useEffect(() => {
+  if (youngProfiles && myDesiredActivities.length > 0) {
+      console.log("Young Profiles ==> ", youngProfiles);
+
+      myDesiredActivities.forEach(activity => {
+          if (activity === "Indoor") {
+              console.log("Inside Activity");
+              youngProfiles.forEach(profile => {
+                  for (const activity in profile.IndoorActivities) {
+                      if (profile.IndoorActivities[activity] && props.user.IndoorActivities[activity]) {
+                          console.log("For ", activity);
+                          setJuniorProfilesArray(prevProfiles => [
+                              ...prevProfiles,
+                              { id: profile.id, name: profile.name, email: profile.email, type: "Indoor", activity: activity }
+                          ]);       
+                      }
                   }
-              }
-          });
-
-        }
-        else if(myDesiredActivity=="Remote"){
-          console.log("Inside Activity")
-          youngProfiles.forEach(profile => {
-              for (const activity in profile.RemoteActivities) {
-                  if (profile.RemoteActivities[activity]) {
-                      console.log("For ", activity);
-                      setJuniorProfilesArray(prevProfiles => [
-                          ...prevProfiles,
-                          {  id:profile.id,name: profile.name, email: profile.email, type: "Remote", activity: activity }
-                      ]);       
+              });
+          } else if (activity === "Outdoor") {
+              console.log("Inside Activity");
+              youngProfiles.forEach(profile => {
+                  for (const activity in profile.OutdoorActivities) {
+                      if (profile.OutdoorActivities[activity] && props.user.OutdoorActivities[activity]) {
+                          console.log("For ", activity);
+                          setJuniorProfilesArray(prevProfiles => [
+                              ...prevProfiles,
+                              { id: profile.id, name: profile.name, email: profile.email, type: "Outdoor", activity: activity }
+                          ]);       
+                      }
                   }
-              }
-          });
-        }
-    }
-    }
-    
-   
-
-   },[youngProfiles])
+              });
+          } else if (activity === "Remote") {
+              console.log("Inside Activity");
+              youngProfiles.forEach(profile => {
+                  for (const activity in profile.RemoteActivities) {
+                      if (profile.RemoteActivities[activity] && props.user.RemoteActivities[activity]) {
+                          console.log("For ", activity);
+                          setJuniorProfilesArray(prevProfiles => [
+                              ...prevProfiles,
+                              { id: profile.id, name: profile.name, email: profile.email, type: "Remote", activity: activity }
+                          ]);       
+                      }
+                  }
+              });
+          }
+      });
+  }
+}, [youngProfiles]);
 
 
    useEffect(()=>{
@@ -173,13 +185,43 @@ function JuniorProfiles(props) {
                   // Conversation does not exist, proceed with insertion
                   const insertResult = await supabase
                       .from('conversation')
-                      .insert([{ participant1: props.myProfile.id, participant2: id, unReadCount: 0 }]);
+                      .insert([{ participant1: props.myProfile.id, participant2: id, unReadCount: 0 }])
+                      .select()
+                      .single();
                   if (insertResult.error) {
                       setIsloading(false)
-                  } else {
+                  } else if(insertResult.data) {
                     handleSuccess('Your msg has been sent')
                     setIsloading(false)
+                    console.log('Conversation inserted successfully:', insertResult.data);
+                    const messageData = await supabase
+                    .from('message')
+                    .insert([
+                      { messageContent: `
+                      <$%activity%$>
+                      ${activity}
+                      <$%activity%$>
+                      <$%name%$>
+                      ${name}
+                      <$%name%$>
+                      <$%type%$>
+                      ${type}
+                      <$%type%$>
+                      `,senderId:props.myProfile.id,conversationId:insertResult.data.id },
+                    ])
+                    .select()
+                    .single()
+                    if(messageData.data){
+                      handleSuccess('Your message request has been sent')
+                      setIsloading(false)
                       console.log('Conversation inserted successfully:', insertResult.data);
+                    }
+
+                    else if(messageData.error){
+                     handleFailure("Failed to send message request")
+                      setIsloading(false)
+                      console.log('Conversation inserted successfully:', insertResult.data);
+                    }
                   }
               }
           }   
@@ -201,7 +243,7 @@ function JuniorProfiles(props) {
           />
           <div className='flex flex-col'>
             <h1 className='font-bold text-xl text-primary2'>{name}</h1>
-            <p>{email}</p>
+            <p className='text-xs'>{email}</p>
           </div>
         </div>
   
@@ -211,7 +253,7 @@ function JuniorProfiles(props) {
         <div className='flex flex-row justify-between px-3 items-center mt-2'>
          
          {!isloading ? (<button onClick={()=>{handleChat()}} className='bg-primary p-2 w-[100px] text-white rounded-full hover:bg-secondary'>Request</button>) : (<div className="loader"></div>)} 
-          <p className='font-bold text-3xl text-primary2'>$13.00/-</p>
+          {/* <p className='font-bold text-3xl text-primary2'>$13.00/-</p> */}
         </div>
       </div>
     );

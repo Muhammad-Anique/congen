@@ -16,11 +16,13 @@ import supabase from '../config/supabaseClient'
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { setUser } from '../store/slices/userSlice'
+import MyProfile from '../Components/MyProfile'
 
 
 function OldDashboard() {
   const dispatch = useDispatch()
-  const [user, setUser] =useState(useSelector((state)=>{ return state.user.data }))
+  const [user, setUser_] =useState(useSelector((state)=>{ return state.user.data }))
 
 
   function Page(){
@@ -91,7 +93,7 @@ function OldDashboard() {
       }
     })
 
-    const [user, setUser] =useState(useSelector((state)=>{ return state.user.data }))
+    const [user, setUser_] =useState(useSelector((state)=>{ return state.user.data }))
 
     const handleRatingChange = (type, index) => {
       const updatedActivity = { ...activity };
@@ -152,11 +154,13 @@ function OldDashboard() {
       OutdoorActivities:OutdoorActivities,RemoteActivities:RemoteActivities})
     .eq('id', user.id)
     .select()
+    .single()
 
     if(data){
       setIsloading(false)
       handleSuccess("profile updated")
-      console.log("Profile Update  = > ", data)
+      console.log("Profile Update _ o  = > ", data)
+      dispatch(setUser(data))
     }
 
     if(error){
@@ -177,6 +181,7 @@ function OldDashboard() {
         <h1 className='font-bold'>{user.name}</h1>
   
         </div>
+        <MyProfile user={user}/>
   
         <div className='h-full w-full flex flex-row justify-between flex-wrap overflow-y-scroll gap-8'>
   
@@ -244,7 +249,7 @@ function OldDashboard() {
 
           <div className='w-full p-4 rounded-lg h-full flex flex-row flex-wrap gap-2 overflow-y-auto'>
             {Object.entries(activity["Outdoor"].preferredActivities[0]).map(([activityName, checked], index) => (
-              <div className='bg-white w-auto max-w-[100%] max-h-[80px] h-auto rounded-xl flex flex-row justify-center items-center p-2 border-2 border-primary gap-3 checkbox-wrapper' key={index}>
+              <div className='bg-white w-auto max-w-[100%] max-h-[80px] h-auto rounded-xl flex flex-row justify-center items-center p-2 border-2 border-primary3 gap-3 checkbox-wrapper' key={index}>
                 <input type="checkbox" checked={checked} onChange={() => handlePreferredActivityChange("Outdoor", activityName)} />
                 <p>{activityName}</p>
               </div>

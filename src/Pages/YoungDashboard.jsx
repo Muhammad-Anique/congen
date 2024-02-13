@@ -13,12 +13,13 @@ import { setNavigation } from '../store/slices/navigationSlice'
 import supabase from '../config/supabaseClient'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 import '../Assets/Spinner/spinner.css'
+import { setUser } from '../store/slices/userSlice'
+import MyProfile from '../Components/MyProfile'
 
 function YoungDashboard() {
   const dispatch = useDispatch()
-  const [user, setUser] =useState(useSelector((state)=>{ return state.user.data }))
+  const [user, setUser_] =useState(useSelector((state)=>{ return state.user.data }))
   function Page(){
     const data = useSelector((state)=>{ return state.youngDashboard.data })
     const [isloading, setIsloading] =useState(false)
@@ -86,7 +87,7 @@ function YoungDashboard() {
 
 
 
-    const [user, setUser] =useState(useSelector((state)=>{ return state.user.data }))
+    const [user, setUser_] =useState(useSelector((state)=>{ return state.user.data }))
 
     const handleRatingChange = (type, index) => {
       const updatedActivity = { ...activity };
@@ -156,11 +157,15 @@ function YoungDashboard() {
       OutdoorActivities:OutdoorActivities,RemoteActivities:RemoteActivities})
     .eq('id', user.id)
     .select()
+    .single()
 
     if(data){
       setIsloading(false)
       handleSuccess("profile updated")
       console.log("Profile Update  = > ", data)
+      dispatch(setUser(data))
+    
+  
     }
 
     if(error){
@@ -176,7 +181,7 @@ function YoungDashboard() {
 
     if(data==0){
       return(
-        <div className='w-[82vw] bg-gray-100 p-[50px] flex flex-col gap-10'>
+        <div className='w-[82vw] bg-gray-100 px-[30px] pt-[30px] flex flex-col gap-5'>
         <div className='flex flex-row justify-between items-center'>
         <h1 className='text-4xl font-bold '>My Profile</h1>
         <div className=' w-auto px-[15px] py-[10px] h-[40px] bg-white rounded-full flex items-center justify-center'>
@@ -186,8 +191,10 @@ function YoungDashboard() {
   
         </div>
   
-        <div className='h-full w-full flex flex-row justify-between flex-wrap overflow-y-scroll gap-8'>
+       
   
+        <div className='h-full w-full flex flex-row justify-between flex-wrap overflow-y-scroll gap-8'>
+        <MyProfile user={user}/>
         <div name="ActivityIndoor" className='w-full h-auto flex gap-7 flex-row items-center '>
           <div className='bg-white rounded-xl shadow-md w-[400px]  h-[230px] flex gap-7 flex-col items-center justify-center'>
             <h1 className='font-bold text-xl text-[#4b4b4b]'>Indoor Activity</h1>
@@ -215,7 +222,7 @@ function YoungDashboard() {
 
           <div className='w-full p-4 rounded-lg h-full flex flex-row flex-wrap gap-2 overflow-y-auto'>
             {Object.entries(activity["Indoor"].preferredActivities[0]).map(([activityName, checked], index) => (
-              <div className='bg-white w-auto max-w-[100%] max-h-[80px] h-auto rounded-xl flex flex-row justify-center items-center p-2 border-2 border-primary gap-3 checkbox-wrapper' key={index}>
+              <div className='bg-white w-auto max-w-[100%] max-h-[80px] h-auto rounded-xl flex flex-row justify-center items-center p-2 border-2 border-primary3 gap-3 checkbox-wrapper' key={index}>
                 <input type="checkbox" checked={checked} onChange={() => handlePreferredActivityChange("Indoor", activityName)} />
                 <p>{activityName}</p>
               </div>
@@ -252,7 +259,7 @@ function YoungDashboard() {
 
           <div className='w-full p-4 rounded-lg h-full flex flex-row flex-wrap gap-2 overflow-y-auto'>
             {Object.entries(activity["Outdoor"].preferredActivities[0]).map(([activityName, checked], index) => (
-              <div className='bg-white w-auto max-w-[100%] max-h-[80px] h-auto rounded-xl flex flex-row justify-center items-center p-2 border-2 border-primary gap-3 checkbox-wrapper' key={index}>
+              <div className='bg-white w-auto max-w-[100%] max-h-[80px] h-auto rounded-xl flex flex-row justify-center items-center p-2 border-2 border-primary3 gap-3 checkbox-wrapper' key={index}>
                 <input type="checkbox" checked={checked} onChange={() => handlePreferredActivityChange("Outdoor", activityName)} />
                 <p>{activityName}</p>
               </div>
@@ -288,7 +295,7 @@ function YoungDashboard() {
 
           <div className='w-full p-4 rounded-lg h-full flex flex-row flex-wrap gap-2 '>
             {Object.entries(activity["Remote"].preferredActivities[0]).map(([activityName, checked], index) => (
-              <div className='bg-white w-auto max-w-[90%] max-h-[80px] h-auto rounded-xl flex flex-row justify-center items-center p-2 border-2 border-primary gap-3 checkbox-wrapper' key={index}>
+              <div className='bg-white w-auto max-w-[90%] max-h-[80px] h-auto rounded-xl flex flex-row justify-center items-center p-2 border-2 border-primary3 gap-3 checkbox-wrapper' key={index}>
                 <input type="checkbox" checked={checked} onChange={() => handlePreferredActivityChange("Remote", activityName)} />
                 <p>{activityName}</p>
               </div>

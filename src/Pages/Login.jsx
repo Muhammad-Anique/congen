@@ -10,11 +10,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import supabase from '../config/supabaseClient';
 import { setUser } from '../store/slices/userSlice';
 
-
+import { useTranslation } from 'react-i18next';
 
 function Login() {
  
   const dispatch =useDispatch()
+  const { t } = useTranslation();
 
   const [email, setEmail] =useState('')
   const [password, setPassword] =useState('')
@@ -132,8 +133,13 @@ function Login() {
       <div className='w-[50%] h-[1.5px] bg-[#ededed]'></div>
     
       <div className='flex flex-col justify-center items-center'>
-      <p className='text-lg'>Don't have an account? <button  onClick={()=>{dispatch(setNavigation(1))}} className='text-primary font-bold mt-[10px]'>SignUp</button> </p>
-      <p className='text-lg'>Forgot password? <button className='text-primary font-bold mt-[10px]'>Click Here</button> </p>
+      <p className='text-lg'>{t('Don\'t have an account?')} <button  onClick={()=>{dispatch(setNavigation(1))}} className='text-primary font-bold mt-[10px]'>SignUp</button> </p>
+      <p className='text-lg'>Forgot password? <button onClick={async()=>{
+        // let { data, error } = await supabase.auth.resetPasswordForEmail(email)
+        // if(data){
+        //   handleSuccess("You have been sent an email for password recovery")
+        // }
+      }} className='text-primary font-bold mt-[10px] hover:text-primary2'>Click Here</button> </p>
       </div>
     
     </div>
