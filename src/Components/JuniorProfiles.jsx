@@ -3,15 +3,17 @@ import { useSelector } from 'react-redux'
 import supabase from '../config/supabaseClient'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 import '../Assets/Spinner/spinner.css'
+import { useTranslation } from 'react-i18next';
 
 function JuniorProfiles(props) {
 
+  const { t } = useTranslation();
 
     const [youngProfiles, setYoungProfiles] =useState([])
     const [myDesiredActivities, setMyDesiredActivities] = useState([]);
     const [juniorProfilesArray, setJuniorProfilesArray] =useState([])
+    const [isloading, setIsloading] =useState(true)
 
     useEffect(() => {
       function highestRating(indoor, outdoor, remote) {
@@ -68,9 +70,11 @@ function JuniorProfiles(props) {
             if (data) {
                 console.log(data);
                 setYoungProfiles(youngProfiles => [...youngProfiles, ...data]); // Append fetched profiles to existing state
+                setIsloading(false)
             }
             if (error) {
                 console.log(error);
+                setIsloading(false)
             }
         });
     }
@@ -126,6 +130,7 @@ useEffect(() => {
               });
           }
       });
+     
   }
 }, [youngProfiles]);
 
@@ -140,6 +145,7 @@ useEffect(() => {
    
   const JuniorProfileCard = (props) => {
     
+  const { t } = useTranslation();
   const handleSuccess = (msg) => {
     toast.success(msg, {
       position: "top-right",
@@ -262,12 +268,12 @@ useEffect(() => {
           </div>
         </div>
   
-        <h1 className='font-bold text-primary px-3 mt-2'> {type} Activity</h1>
+        <h1 className='font-bold text-primary px-3 mt-2'> {type} {t("Activity")}</h1>
         <p className='px-3 min-h-[60px]'>{activity}</p>
   
         <div className='flex flex-row justify-between px-3 items-center mt-2'>
          
-         {!isloading ? (<button onClick={()=>{handleChat()}} className='bg-primary p-2 w-[100px] text-white rounded-full hover:bg-secondary'>Request</button>) : (<div className="loader"></div>)} 
+         {!isloading ? (<button onClick={()=>{handleChat()}} className='bg-primary p-2 w-[100px] text-white rounded-full hover:bg-secondary'>{t("Request")}</button>) : (<div className="loader"></div>)} 
           {/* <p className='font-bold text-3xl text-primary2'>$13.00/-</p> */}
         </div>
       </div>
@@ -278,12 +284,14 @@ useEffect(() => {
 
   return (
     <div className='h-full w-full flex flex-row gap-5 flex-wrap overflow-y-auto'>
-    {juniorProfilesArray.length > 0 ? (
+    {juniorProfilesArray && juniorProfilesArray.length > 0 ? (
        juniorProfilesArray.map((element, index) => (
          <JuniorProfileCard key={index} youngProfile={element} myProfile={props.user} />
        ))
      ) : (
-       <h1>No Match Found</h1>
+       isloading ? (<div className='loader'></div>) : (
+        juniorProfilesArray && juniorProfilesArray.length <= 0 ? (<h1>{t("No Match Found")}</h1>) :('')
+       )
      )}
         
     <ToastContainer />

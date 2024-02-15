@@ -9,8 +9,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux';
 import { setNavigation } from '../store/slices/navigationSlice';
 
+import { useTranslation } from 'react-i18next';
+
 
 function SignUp() {
+  const { t } = useTranslation();
   const dispatch = useDispatch()
   const [page, setpage] =useState(0)
   const [isYoung, setisYoung] = useState(false);
@@ -106,32 +109,32 @@ function SignUp() {
     // Validate before submission
     if (!isValidEmail()) {
       console.error('Invalid email format');
-      handleFailure("Invalid email format")
+      handleFailure(`${t("Invalid email format")}`)
       return;
     }
 
     if (!isValidDOB()) {
       console.error('User must be 18 or older');
-      handleFailure("User must be 18 or older")
+      handleFailure(`${t("User must be 18 or older")}`)
       return;
     }
 
     if (!isValidPassword()) {
       console.error('Password must be at least 8 characters and match confirm password');
-      handleFailure("Password does not match")
+      handleFailure(`${t("Password does not match")}`)
       return;
     }
 
     if (!isValidContactNo()) {
       console.error('Invalid contact number for Italy');
-      handleFailure("Invalid Contact Number")
+      handleFailure(`${t("Invalid Contact Number")}`)
       return;
     }
 
 
     if (!isYoung && !isOld) {
       console.error('Invalid contact number for Italy');
-      handleFailure("Select Young or Old")
+      handleFailure(`${t("Select Young or Old")}`)
       return;
 
     }
@@ -157,17 +160,16 @@ function SignUp() {
 
       {
         page === 0 ? (   <form className='flex flex-col justify-center items-center gap-[12px]' onSubmit={handleSubmit}>
-        <Field type="text" placeholder="Name" name="name" value={formData.name} onChange={handleChange} />
-        <Field type="text" placeholder="Email" name="email" value={formData.email} onChange={handleChange} />
-        <Field type="date" placeholder="Date of Birth" name="dob" value={formData.dob} onChange={handleChange} />
-        <Field type="number" placeholder="Contact No." name="contactNo" value={formData.contactNo} onChange={handleChange} />
-        <Field type="password" placeholder="Password" name="password" value={formData.password} onChange={handleChange} />
-        <Field type="password" placeholder="Confirm Password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} />
-      
-      
-    
+      <Field type="text" placeholder={t("Name")} name="name" value={formData.name} onChange={handleChange} />
+      <Field type="text" placeholder={t("Email")} name="email" value={formData.email} onChange={handleChange} />
+      <Field type="date" placeholder={t("Date of Birth")} name="dob" value={formData.dob} onChange={handleChange} />
+      <Field type="number" placeholder={t("Contact No.")} name="contactNo" value={formData.contactNo} onChange={handleChange} />
+      <Field type="password" placeholder={t("Password")} name="password" value={formData.password} onChange={handleChange} />
+      <Field type="password" placeholder={t("Confirm Password")} name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} />
+
+          
       <div className='flex flex-row justify-center items-center gap-5'>
-        <p>Sign up as :</p>
+        <p>{t("Sign up as")} :</p>
       <label>
         <input
           type="radio"
@@ -176,7 +178,7 @@ function SignUp() {
           checked={isYoung}
           onChange={() => handleAgeChange('isYoung')}
         />
-        Young
+       {t("Young")}
       </label>
 
       <label>
@@ -187,7 +189,7 @@ function SignUp() {
           checked={isOld}
           onChange={() => handleAgeChange('isOld')}
         />
-        Old
+        {t("Old")}
       </label>
 
     </div>
@@ -195,12 +197,12 @@ function SignUp() {
 
      
 
-        <button type="submit" className='w-[360px] h-[45px] bg-primary hover:bg-secondary text-primary2 text-xl rounded-sm'>Next</button>
+        <button type="submit" className='w-[360px] h-[45px] bg-primary hover:bg-secondary text-primary2 text-xl rounded-sm'>{t("Next")}</button>
       </form>) : ( <ActivitySelector setFormData={setFormData} isYoung={isYoung} isOld={isOld} Data={formData} page={setpage}/>)
       }
   
      
-    <p className='text-lg'>Already have an account? <button  onClick={()=>{dispatch(setNavigation(0))}} className='text-primary font-bold mt-[10px]'>login</button> </p>
+    <p className='text-lg'>{t("Already have an account?")} <button  onClick={()=>{dispatch(setNavigation(0))}} className='text-primary font-bold mt-[10px]'>login</button> </p>
     {/* <div className='w-[50%] h-[1.5px] bg-[#ededed]'></div> */}
       {/* <p className='text-lg'>Already have an account? <Link className='text-primary font-bold mt-[10px]'>Login</Link> </p> */}
     </div>

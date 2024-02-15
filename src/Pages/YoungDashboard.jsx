@@ -17,10 +17,17 @@ import '../Assets/Spinner/spinner.css'
 import { setUser } from '../store/slices/userSlice'
 import MyProfile from '../Components/MyProfile'
 
+import { useTranslation } from 'react-i18next';
+
 function YoungDashboard() {
   const dispatch = useDispatch()
+  const { t } = useTranslation();
   const [user, setUser_] =useState(useSelector((state)=>{ return state.user.data }))
+
+
+
   function Page(){
+    const { t } = useTranslation();
     const data = useSelector((state)=>{ return state.youngDashboard.data })
     const [isloading, setIsloading] =useState(false)
     
@@ -197,22 +204,22 @@ function YoungDashboard() {
         <MyProfile user={user}/>
         <div name="ActivityIndoor" className='w-full h-auto flex gap-7 flex-row items-center '>
           <div className='bg-white rounded-xl shadow-md w-[400px]  h-[230px] flex gap-7 flex-col items-center justify-center'>
-            <h1 className='font-bold text-xl text-[#4b4b4b]'>Indoor Activity</h1>
+            <h1 className='font-bold text-xl text-[#4b4b4b]'>{t("Indoor Activity")}</h1>
             <div className='flex flex-col w-full px-[30px]'>
               <div className='flex w-full flex-row justify-between items-center radio-wrapper'>
-                <p>Want to do</p>
+                <p>{t("Want to do")}</p>
                 <div>
                   <input type="radio" name="wantToDo1" checked={activity["Indoor"].rating[0]} onChange={() => handleRatingChange("Indoor", 0)} />
                 </div>
               </div>
               <div className='flex flex-row justify-between items-center gap-7 radio-wrapper'>
-                <p>Doable</p>
+                <p>{t("Doable")}</p>
                 <div>
                   <input type="radio" name="doable1" checked={activity["Indoor"].rating[1]} onChange={() => handleRatingChange("Indoor", 1)} />
                 </div>
               </div>
               <div className='flex flex-row justify-between items-center gap-7 radio-wrapper'>
-                <p>Barely doable</p>
+                <p>{t("Barely doable")}</p>
                 <div>
                   <input type="radio" name="barelyDoable1" checked={activity["Indoor"].rating[2]} onChange={() => handleRatingChange("Indoor", 2)} />
                 </div>
@@ -234,22 +241,22 @@ function YoungDashboard() {
 
         <div name="ActivityOutdoor" className='w-full h-auto flex gap-7 flex-row items-center '>
           <div className='bg-white rounded-xl shadow-md w-[400px]  h-[230px] flex gap-7 flex-col items-center justify-center'>
-            <h1 className='font-bold text-xl text-[#4b4b4b]'>Outdoor Activity</h1>
+            <h1 className='font-bold text-xl text-[#4b4b4b]'>{t("Outdoor Activity")}</h1>
             <div className='flex flex-col w-full px-[30px]'>
               <div className='flex w-full flex-row justify-between items-center radio-wrapper'>
-                <p>Want to do</p>
+              <p>{t("Want to do")}</p>
                 <div>
                   <input type="radio" name="wantToDo2" checked={activity["Outdoor"].rating[0]} onChange={() => handleRatingChange("Outdoor", 0)} />
                 </div>
               </div>
               <div className='flex flex-row justify-between items-center gap-7 radio-wrapper'>
-                <p>Doable</p>
+              <p>{t("Doable")}</p>
                 <div>
                   <input type="radio" name="doable2" checked={activity["Outdoor"].rating[1]} onChange={() => handleRatingChange("Outdoor", 1)} />
                 </div>
               </div>
               <div className='flex flex-row justify-between items-center gap-7 radio-wrapper'>
-                <p>Barely doable</p>
+              <p>{t("Barely doable")}</p>
                 <div>
                   <input type="radio" name="barelyDoable2" checked={activity["Outdoor"].rating[2]} onChange={() => handleRatingChange("Outdoor", 2)} />
                 </div>
@@ -270,22 +277,22 @@ function YoungDashboard() {
 
         <div name="ActivityRemote" className='w-full h-auto flex gap-7 flex-row items-center  '>
           <div className='bg-white rounded-xl shadow-md w-[400px] h-[230px] flex gap-7 flex-col items-center justify-center'>
-            <h1 className='font-bold text-xl text-[#4b4b4b]'>Remote Activity</h1>
+            <h1 className='font-bold text-xl text-[#4b4b4b]'>{t("Remote Activity")}</h1>
             <div className='flex flex-col w-full px-[30px]'>
               <div className='flex w-full flex-row justify-between items-center radio-wrapper'>
-                <p>Want to do</p>
+              <p>{t("Want to do")}</p>
                 <div>
                   <input type="radio" name="wantToDo3" checked={activity["Remote"].rating[0]} onChange={() => handleRatingChange("Remote", 0)} />
                 </div>
               </div>
               <div className='flex flex-row justify-between items-center gap-7 radio-wrapper'>
-                <p>Doable</p>
+              <p>{t("Doable")}</p>
                 <div>
                   <input type="radio" name="doable3" checked={activity["Remote"].rating[1]} onChange={() => handleRatingChange("Remote", 1)} />
                 </div>
               </div>
               <div className='flex flex-row justify-between items-center gap-7 radio-wrapper'>
-                <p>Barely doable</p>
+              <p>{t("Barely doable")}</p>
                 <div>
                   <input type="radio" name="barelyDoable3" checked={activity["Remote"].rating[2]} onChange={() => handleRatingChange("Remote", 2)} />
                 </div>
@@ -317,7 +324,7 @@ function YoungDashboard() {
       return(
         <div className='w-[82vw] bg-gray-100 p-[50px] flex flex-col gap-10'>
         <div className='flex flex-row justify-between items-center'>
-        <h1 className='text-4xl font-bold '>Senior Profile</h1>
+        <h1 className='text-4xl font-bold '>{t("Senior Profile")}</h1>
         <div className='min-w-[240px] w-auto px-[15px] py-[10px] h-[40px] bg-white rounded-full flex items-center justify-center'>
           <p className='font-medium'>{user.email}</p>
         </div>
@@ -373,17 +380,17 @@ function YoungDashboard() {
       <div className='flex flex-col  gap-5'>
         <div onClick={()=>{dispatch(setYoungDashboardSlice(0))}} className='flex flex-row items-center gap-3 bg-gray-100 text-black px-[15px] hover:bg-primary hover:cursor-pointer hover:text-white rounded-sm  py-[10px]'>
         <FiUser size={20}/>
-        <button className=' text-lg'>My Profile</button>
+        <button className=' text-lg'>{t("My Profile")}</button>
         </div>
 
         <div  onClick={()=>{dispatch(setYoungDashboardSlice(1))}}  className='flex flex-row items-center gap-3 bg-gray-100 px-[15px] rounded-sm hover:bg-primary hover:cursor-pointer hover:text-white py-[10px]'>
         <FiUsers size={20} />
-        <button className=' text-lg'>Senior's Profiles</button>
+        <button className=' text-lg'>{t("Senior's Profiles")}</button>
         </div>
 
         <div  onClick={()=>{dispatch(setYoungDashboardSlice(2))}}  className='flex flex-row items-center gap-3 bg-gray-100 px-[15px] rounded-sm hover:bg-primary hover:cursor-pointer hover:text-white  py-[10px]'>
         <FiMessageSquare size={20} />
-        <button className=' text-lg'>Messages</button>
+        <button className=' text-lg'>{t("Messages")}</button>
         </div>
       </div>
       </div>
@@ -392,7 +399,7 @@ function YoungDashboard() {
 
        <div onClick={()=>{dispatch(setYoungDashboardSlice(0)); dispatch(setNavigation(0)); updateUser( user.id )}} className='flex flex-row items-center gap-3 bg-gray-100 px-[15px] rounded-sm hover:bg-primary hover:cursor-pointer hover:text-white  py-[10px]'>
        <FiLogOut size={20} />
-        <button   className=' text-lg'>LogOut</button>
+        <button   className=' text-lg'>{t("LogOut")}</button>
         </div>     
     </nav> 
 

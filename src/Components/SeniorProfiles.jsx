@@ -3,12 +3,14 @@ import supabase from '../config/supabaseClient'
 import { useSelector } from 'react-redux'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { useTranslation } from 'react-i18next';
 import '../Assets/Spinner/spinner.css'
 
 function SeniorProfiles(props) {
+  const { t } = useTranslation();
 
     const [oldProfiles, setOldProfiles] =useState([])
+    const [isloading,setIsloading] =useState(true)
     const [myDesiredActivities, setMyDesiredActivities] = useState([]);
     const [seniorProfilesArray, setSeniorProfilesArray] =useState([])
     useEffect(() => {
@@ -64,9 +66,11 @@ function SeniorProfiles(props) {
             if (data) {
                 console.log(data);
                 setOldProfiles(oldProfiles => [...oldProfiles, ...data]); // Append fetched profiles to existing state
+                setIsloading(false)
             }
             if (error) {
                 console.log(error);
+                setIsloading(false)
             }
         });
     }
@@ -137,6 +141,8 @@ function SeniorProfiles(props) {
   const SeniorProfileCard = (props) => {
     const {id, name, email, type, activity, pic } = props.oldProfile;
     const [isloading,setIsloading] =useState(false)
+    const { t } = useTranslation();
+
     
     const handleSuccess = (msg) => {
       toast.success(msg, {
@@ -257,7 +263,7 @@ function SeniorProfiles(props) {
           </div>
         </div>
   
-        <h1 className='font-bold text-primary px-3 mt-2'> {type} Activity</h1>
+        <h1 className='font-bold text-primary px-3 mt-2'> {type} {t("Activity")}</h1>
         <p className='px-3 min-h-[60px]'>{activity}</p>
   
         <div className='flex flex-row justify-between px-3 items-center mt-2'>
@@ -279,9 +285,10 @@ function SeniorProfiles(props) {
       seniorProfilesArray.map((element, index) => (
         <SeniorProfileCard key={index} oldProfile={element} myProfile={props.user} />
       ))
-    ) : (
-      <h1>No Match Found</h1>
-    )}
+    ) :(
+      isloading ? (<div className='loader'></div>) : (
+       seniorProfilesArray && seniorProfilesArray.length <= 0 ? (<h1>{t("No Match Found")}</h1>) :('')
+      ))}
       <ToastContainer />
   </div>
   )

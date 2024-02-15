@@ -117,23 +117,25 @@ function Login() {
     }
   }
 
+
+
   return (
     <div className='w-full h-full bg-[#ffffff] flex flex-row justify-center items-center '>
     <div className='w-[40%] h-full bg-white flex flex-col justify-center items-center gap-[30px]'>
       <div className='flex flex-col justify-center items-center gap-3'>
       <img src={logo} className='h-[120px] w-[120px]' alt="" />
-      <p  className='text-[#4b4b4b] w-[300px] leading-[20px] text-center '>{t("Hello, World!")}</p>
+      <p  className='text-[#4b4b4b] w-[300px] leading-[20px] text-center '>{t("Put your credential to login to congen organization and get connected.")}</p>
       </div>
   
       <div className='flex flex-col justify-center items-center gap-[10px]'>
-      <Field type="text" placeholder="Email" value={email} onChange={handleChange1}/>
-      <Field type="password" placeholder="Password" value={password} onChange={handleChange2}/>
+      <Field type="text" placeholder={t("Email")} value={email} onChange={handleChange1}/>
+      <Field type="password" placeholder={t("Password")} value={password} onChange={handleChange2}/>
       <button onClick={()=>{handleLogin()}} className='w-[360px] h-[45px] bg-primary hover:bg-secondary text-primary2  text-xl rounded-sm'>Login</button>
       </div>
       <div className='w-[50%] h-[1.5px] bg-[#ededed]'></div>
     
       <div className='flex flex-col justify-center items-center'>
-      <p className='text-lg'>{t('Don\'t have an account?')} <button  onClick={()=>{dispatch(setNavigation(1))}} className='text-primary font-bold mt-[10px]'>SignUp</button> </p>
+      <p className='text-lg'>{t("Don't have an account?")} <button  onClick={()=>{dispatch(setNavigation(1))}} className='text-primary font-bold mt-[10px]'>{t("SignUp")}</button> </p>
       {/* <p className='text-lg'>Forgot password? <button onClick={async()=>{
         if(email){
           let { data, error } = await supabase.auth.resetPasswordForEmail(email)

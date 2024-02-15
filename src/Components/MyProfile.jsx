@@ -4,7 +4,9 @@ import supabase from '../config/supabaseClient';
 import '../Assets/Spinner/spinner.css'
 import { v4 as uuidv4 } from 'uuid';
 import { FaPencilAlt } from "react-icons/fa";
+import { useTranslation } from 'react-i18next';
 function MyProfile(props) {
+  const { t } = useTranslation();
   
     const [changing, setChanging] =useState(false)
     const [isloading, setIsloading] =useState(false) 
@@ -37,13 +39,13 @@ function MyProfile(props) {
                 setIsloading(false)
                 setChanging(false)
                 console.error("Error updating user:", error.message);
-                alert("Password Cannot be Updated")
+                alert(`${t("Password Cannot be Updated")}`)
                 return { error: error.message };
             } else {
                 setIsloading(false)
                 setChanging(false)
                 console.log("User updated successfully:", data);
-                alert("Password updated")
+                alert(`${t("Password updated")}`)
                 return { data: data };
             }
         } catch (err) {
@@ -141,27 +143,27 @@ function MyProfile(props) {
         </div>
         <div className='flex flex-col'>
         <div className='flex flex-row items-center gap-3'>
-            <h1 className='font-bold text-lg'>Full Name: </h1>
+            <h1 className='font-bold text-lg'>{t("Full Name")}: </h1>
             <h1 className='text-lg border-2 rounded-full  px-3 text-primary2'>{props.user.name}</h1>
         </div>
         <div className='flex flex-row items-center gap-3'>
-            <h1 className='font-bold text-lg'>Age: </h1>
+            <h1 className='font-bold text-lg'>{t("Age")}: </h1>
             <h1 className='text-lg border-2 rounded-full  px-3 text-primary2'>{ calculateAge(props.user.dob)}</h1>
         </div>
 
         <div className='flex flex-row items-center gap-3'>
-            <h1 className='font-bold text-lg'>Date of Birth: </h1>
+            <h1 className='font-bold text-lg'>{t("Date of Birth")}: </h1>
             <h1 className='text-lg border-2 rounded-full px-3 text-primary2'>{(props.user.dob)}</h1>
         </div>
 
         <div className='flex flex-row items-center gap-3 mt-2'>
             {
-                !changing ? (            <button onClick={()=>{setChanging(true)}} className='text-lg p-1 border-2 rounded-md hover:bg-primary2 px-3 text-primary2  hover:text-white'>change password</button>
+                !changing ? (            <button onClick={()=>{setChanging(true)}} className='text-lg p-1 border-2 rounded-md hover:bg-primary2 px-3 text-primary2  hover:text-white'>{t("change password")}</button>
                 ) : ( 
-                    <>   <h1 className='font-bold text-lg'>New Password</h1>
+                    <>   <h1 className='font-bold text-lg'>{t("New Password")}</h1>
                     <input type={`password`} className=' px-2 py-1 w-[300px] h-[40px] rounded-md border border-gray-400' value={newPassword} onChange={(e)=>{setNewPassword(e.target.value)}} />
                      {
-                        isloading ? (<div className='loader'></div>) : (                    <button onClick={()=>{updateUser(props.email, newPassword)}} className='text-lg p-1 border-2 rounded-md hover:bg-primary2 px-3 text-primary2 hover:text-white'>update password</button>
+                        isloading ? (<div className='loader'></div>) : (                    <button onClick={()=>{updateUser(props.email, newPassword)}} className='text-lg p-1 border-2 rounded-md hover:bg-primary2 px-3 text-primary2 hover:text-white'>{t("update password")}</button>
                         )
                      }
                   

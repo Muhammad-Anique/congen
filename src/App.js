@@ -44,7 +44,7 @@ i18n
 function App() {
   console.log(supabase)
   const dispatch = useDispatch();
-  
+  const [isCLicked, setIsClicked] =useState(false)
   const [lang, setLang] =useState("it")
   const { t } = useTranslation();
   useEffect(() => {
@@ -94,11 +94,18 @@ function App() {
   return (
       <>
       <div className='absolute bottom-2 right-2 z-50 flex flex-col gap-2'>
-      <div className=' w-[130px] h-[40px] bg-white text-white rounded-sm shadow-md z-50 flex flex-row p-4 justify-center items-center gap-2'>
-      <img onClick={() => {i18n.changeLanguage("en"); setLang("en") }} className={`cursor-pointer w-[40px] ${lang==="en" ? ('scale-125 '):('')}`} src="https://flagsapi.com/US/flat/64.png"/>
-      <img onClick={() => {i18n.changeLanguage("it"); setLang("it") }} className={`cursor-pointer  w-[40px] ${lang==="it" ? ('scale-125'):('')} `} src="https://flagsapi.com/IT/flat/64.png"/>
-       </div>
-      <div className='w-[130px] h-[40px] bg-primary text-primary2 rounded-sm shadow-md  flex p-4 justify-center items-center hover:bg-secondary cursor-pointer'>
+        {
+          isCLicked ? ( <div className=' w-[130px] h-[40px] bg-white text-white rounded-sm shadow-md z-50 flex flex-row p-4 justify-center items-center gap-2'>
+          <img onClick={() => {i18n.changeLanguage("en"); setLang("en"); setTimeout(() => {
+            setIsClicked(!isCLicked) 
+          }, 1500); }} className={`cursor-pointer w-[40px] ${lang==="en" ? ('scale-125 '):('')}`} src="https://flagsapi.com/US/flat/64.png"/>
+          <img onClick={() => {i18n.changeLanguage("it"); setLang("it"); setTimeout(() => {
+            setIsClicked(!isCLicked) 
+          }, 1500);  }} className={`cursor-pointer  w-[40px] ${lang==="it" ? ('scale-125'):('')} `} src="https://flagsapi.com/IT/flat/64.png"/>
+           </div>) : ('')
+        }
+     
+      <div onClick={()=>{setIsClicked(!isCLicked)}} className='w-[130px] h-[40px] bg-primary text-primary2 rounded-sm shadow-md  flex p-4 justify-center items-center hover:bg-secondary cursor-pointer'>
       <p className='font-bold'>{t("Translate")}</p>
       </div>
       </div>   

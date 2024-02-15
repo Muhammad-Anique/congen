@@ -8,9 +8,11 @@ import { useDispatch } from 'react-redux';
 import { setNavigation } from '../store/slices/navigationSlice';
 
 
+import { useTranslation } from 'react-i18next';
 import '../Assets/Spinner/spinner.css'
 
 function ActivitySelector(props) {
+  const { t } = useTranslation();
   const [isloading, setIsloading] =useState(false)
   const dispatch =useDispatch()
   const navigate = useNavigate()
@@ -151,7 +153,7 @@ function ActivitySelector(props) {
       .select() 
       if(userAdded.data){
         console.log(data)
-        handleSuccess("Verification email has sent")
+        handleSuccess(`${t("Verification email has sent")}`)
         setIsloading(false)
         setTimeout(() => {
           dispatch(setNavigation(0))
@@ -160,7 +162,7 @@ function ActivitySelector(props) {
       }
       if(userAdded.error){
         console.log(error)
-        handleFailure("SignUp Failed")
+        handleFailure(`${t("Sign Up Failed")}`)
         setIsloading(false)
       }
     }
@@ -177,7 +179,7 @@ function ActivitySelector(props) {
   };
   return (
     <div className='flex flex-col justify-center  gap-[12px]'>
-        <p className='text-lg text-gray-500 font-bold'>Select Activity Type</p>
+        <p className='text-lg text-gray-500 font-bold'>{t("Select Activity Type")}</p>
         <div className='flex flex-row items-center'>
     
         <button onClick={()=>{toggleActivity("Indoor")}} className={`border-2 p-2 border-primary w-[110px] text-xl hover:bg-primary hover:font-bold hover:text-white ${isActivityActive("Indoor") ? "bg-primary text-white font-bold" : ""}`}>Indoor</button>
@@ -213,7 +215,7 @@ function ActivitySelector(props) {
 
 
 
-          <p className='text-lg text-gray-500 font-bold'>Select {Object.keys(activity).find(type => activity[type].isActive)} Activity</p>
+          <p className='text-lg text-gray-500 font-bold'>Select {Object.keys(activity).find(type => activity[type].isActive)} {t("Activity")}</p>
           <div className='flex flex-col h-[200px] overflow-y-scroll gap-3 px-[10px] '>
           {Array.from({ length: 4 }, (_, index) => (
             <div key={index} className='flex flex-row gap-2 border-2 rounded-lg p-3 border-primary'>

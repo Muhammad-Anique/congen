@@ -4,8 +4,9 @@ import supabase from '../config/supabaseClient'
 import Message from './Message';
 import { PiSmileyLight } from "react-icons/pi";
 import '../Assets/Spinner/spinner.css'
-
+import { useTranslation } from 'react-i18next';
 function ConversationComponent(props) {
+  const { t } = useTranslation();
   console.log("isActive ", props.state)
   console.log("in conv comp", props.conversation)
   const [participant, setParticipant] =useState({
@@ -67,7 +68,7 @@ function ChatBox(props) {
 
 
 
-
+  const { t } = useTranslation();
   const [isloading, setIsloading] =useState(false)
 
   //All conversations
@@ -309,8 +310,8 @@ function ChatBox(props) {
             {conversation && conversation.length <= 0  ? 
             (<div className='w-full bg-white flex items-center flex-col justify-center h-full'>
               <PiSmileyLight size={70} />
-              <h1 className='text-xl text-center'>No Conversation <br /> Initiated</h1>
-              <p className='text-center mt-4 px-[40px]'>To initiate a conversation, go to people's profile and chat with a desired person</p>
+              <h1 className='text-xl text-center'>{t("No Conversation")} <br /> {t("Initiated")}</h1>
+              <p className='text-center mt-4 px-[40px]'>{t("To initiate a conversation, go to people's profile and chat with a desired person")}</p>
               
             </div>) :''}
         </div>
@@ -329,11 +330,11 @@ function ChatBox(props) {
             {
               receiver.isOnline ? (<>
                <div className='w-[10px] h-[10px] bg-green-400 rounded-full'></div>
-               <p className='text-sm text-[#6e6e6e]'>Online</p>
+               <p className='text-sm text-[#6e6e6e]'>{t("Online")}</p>
               </> ) : (
                 <>
                 <div className='w-[10px] h-[10px] bg-gray-200 rounded-full'></div>
-               <p className='text-sm text-[#6e6e6e]'>Offline | Last Seen: {getLastSeen(receiver.lastSeen)}</p>
+               <p className='text-sm text-[#6e6e6e]'>{t("Offline | Last Seen")}: {getLastSeen(receiver.lastSeen)}</p>
                 </>
               )
             }
@@ -361,11 +362,11 @@ function ChatBox(props) {
        <textarea value={typedMessage} onChange={(e)=>{setTypedMessage(e.target.value)}}  name=""  id=""  className='w-[90%] h-full rounded-lg border-2 border-gray-200 p-3' cols="30" rows="10" placeholder='Type...'></textarea>
         <button onClick={()=>{sendMessage(activeConversation, props.user.id)}} className='bg-primary hover:bg-secondary w-[50px] h-[50px] rounded-full flex justify-center items-center'>
         <span class="material-symbols-outlined text-white text-3xl ">
-            send
+           {t("send")}
         </span>
         </button>
       </div>
-      <p>Don't share your personal details.</p>
+      <p>{t("Note: Don't share your personal details if you dont trust the other person.")}</p>
     </div>
     )
     :(<h1 className=''></h1>) }
