@@ -134,12 +134,19 @@ function Login() {
     
       <div className='flex flex-col justify-center items-center'>
       <p className='text-lg'>{t('Don\'t have an account?')} <button  onClick={()=>{dispatch(setNavigation(1))}} className='text-primary font-bold mt-[10px]'>SignUp</button> </p>
-      <p className='text-lg'>Forgot password? <button onClick={async()=>{
-        // let { data, error } = await supabase.auth.resetPasswordForEmail(email)
-        // if(data){
-        //   handleSuccess("You have been sent an email for password recovery")
-        // }
-      }} className='text-primary font-bold mt-[10px] hover:text-primary2'>Click Here</button> </p>
+      {/* <p className='text-lg'>Forgot password? <button onClick={async()=>{
+        if(email){
+          let { data, error } = await supabase.auth.resetPasswordForEmail(email)
+          if(data){
+            handleSuccess("You have been sent an email for password recovery")
+          } if(error){
+            handleFailure("Incorrect Email or Network Error")
+          }
+        }else{
+          handleFailure("Enter Email")
+        }
+       
+      }} className='text-primary font-bold mt-[10px] hover:text-primary2'>Click Here</button> </p> */}
       </div>
     
     </div>

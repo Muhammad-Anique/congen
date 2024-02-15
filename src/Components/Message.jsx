@@ -12,6 +12,8 @@ function Message(props) {
     const [type, setType] =useState('')
     const [activity,setActivity]=useState('')
     const [content, setContent] =useState(message.messageContent)
+    const [receiverImage, setReciverImage] =useState(receiver.profilePic)
+    const [senderImage, setSenderImage] =useState(user.profilePic) 
    
 
     useEffect(()=>{
@@ -118,7 +120,18 @@ function Message(props) {
         props.convStatus=== "active" ? (
           <>
            <div className='flex flex-row gap-2 items-center'>
-          <img    src={ senderName==receiver.name ? `https://avatar.oxro.io/avatar.svg?name=${senderName.split(' ')[0]}+${senderName.split(' ')[1]}` : (senderName=='Me' ?`https://avatar.oxro.io/avatar.svg?name=${user.name.split(' ')[0]}+${user.name.split(' ')[1]}` : `` )} className='h-[40px] w-[40px] rounded-full bg-red-100'/>
+          <img    src={ senderName==receiver.name ? 
+          (
+          receiverImage ? (receiverImage ) : (`https://avatar.oxro.io/avatar.svg?name=${senderName.split(' ')[0]}+${senderName.split(' ')[1]}`)     
+          ):         
+          (
+            senderName=='Me' ? ( senderImage ? senderImage : `https://avatar.oxro.io/avatar.svg?name=${user.name.split(' ')[0]}+${user.name.split(' ')[1]}`) 
+          : `` 
+          )
+          } 
+            
+            
+            className='h-[40px] w-[40px] rounded-full bg-red-100'/>
           <div className='flex flex-col'>
             <p className='font-medium'>{senderName}</p>
             <p className='text-sm'>{formatTime(message.created_at)}</p>

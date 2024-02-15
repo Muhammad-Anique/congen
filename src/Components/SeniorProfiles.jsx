@@ -88,7 +88,7 @@ function SeniorProfiles(props) {
                             console.log("For ", activity);
                             setSeniorProfilesArray(prevProfiles => [
                                 ...prevProfiles,
-                                { id: profile.id, name: profile.name, email: profile.email, type: "Indoor", activity: activity }
+                                { id: profile.id, name: profile.name, email: profile.email, type: "Indoor", activity: activity,pic: profile.profilePic }
                             ]);       
                         }
                     }
@@ -101,7 +101,7 @@ function SeniorProfiles(props) {
                             console.log("For ", activity);
                             setSeniorProfilesArray(prevProfiles => [
                                 ...prevProfiles,
-                                { id: profile.id, name: profile.name, email: profile.email, type: "Outdoor", activity: activity }
+                                { id: profile.id, name: profile.name, email: profile.email, type: "Outdoor", activity: activity,pic: profile.profilePic }
                             ]);       
                         }
                     }
@@ -114,7 +114,7 @@ function SeniorProfiles(props) {
                             console.log("For ", activity);
                             setSeniorProfilesArray(prevProfiles => [
                                 ...prevProfiles,
-                                { id: profile.id, name: profile.name, email: profile.email, type: "Remote", activity: activity }
+                                { id: profile.id, name: profile.name, email: profile.email, type: "Remote", activity: activity,pic: profile.profilePic }
                             ]);       
                         }
                     }
@@ -135,7 +135,7 @@ function SeniorProfiles(props) {
 
    
   const SeniorProfileCard = (props) => {
-    const {id, name, email, type, activity } = props.oldProfile;
+    const {id, name, email, type, activity, pic } = props.oldProfile;
     const [isloading,setIsloading] =useState(false)
     
     const handleSuccess = (msg) => {
@@ -234,11 +234,23 @@ function SeniorProfiles(props) {
     return (
       <div className='bg-white rounded-xl w-[360px] h-[260px] shadow-md flex gap-2 p-6 py-[30px] flex-col justify-center'>
         <div className='flex flex-row w-full px-4  gap-[20px] items-center'>
-          <img
+           {
+            pic ? (
+              <img
+            src={pic}
+            alt="Profile Avatar"
+            className='bg-gray-100 rounded-full w-[50px] h-[50px]'
+          />
+
+            ) : (
+              <img
             src={`https://avatar.oxro.io/avatar.svg?name=${name.split(' ')[0]}+${name.split(' ')[1]}`}
             alt="Profile Avatar"
             className='bg-gray-100 rounded-full w-[50px] h-[50px]'
           />
+
+            )
+          }
           <div className='flex flex-col'>
             <h1 className='font-bold text-xl text-primary2'>{name}</h1>
             <p>{email}</p>

@@ -10,7 +10,8 @@ function ConversationComponent(props) {
   console.log("in conv comp", props.conversation)
   const [participant, setParticipant] =useState({
     name: "-----",
-    email: "-----"
+    email: "-----",
+    pic:null
   })
 
   useEffect(()=>{
@@ -19,13 +20,15 @@ function ConversationComponent(props) {
     if(conversation.participant1_id !== props.myProfile.id){
       setParticipant({
         name: conversation.participant1_name,
-        email: conversation.participant1_email
+        email: conversation.participant1_email,
+        pic: conversation.participant1_pic
       })
     }
     else if(conversation.participant2_id !== props.myProfile.id){
       setParticipant({
         name: conversation.participant2_name,
-        email: conversation.participant2_email
+        email: conversation.participant2_email,
+        pic: conversation.participant2_pic
       })
     }
   }
@@ -44,7 +47,13 @@ function ConversationComponent(props) {
   
   return (
     <div  onClick={()=>{props.Click(props.conversation.conversation_id)}} className={`flex flex-row w-full py-4 px-[25px] h-[100px] cursor-pointer gap-4 items-center hover:bg-[#e9f9fa] ${props.state.isActive ? 'bg-[#e9f9fa]' : ''}   `}>
-        <img className='rounded-lg w-[50px] h-[50px]' src={`https://avatar.oxro.io/avatar.svg?name=${participant.name.split(' ')[0]}+${participant.name.split(' ')[1]}`}  alt="" />
+       
+       {
+        participant.pic ? (<img className='rounded-lg w-[50px] h-[50px]' src={participant.pic}  alt="" />
+        ) : (<img className='rounded-lg w-[50px] h-[50px]' src={`https://avatar.oxro.io/avatar.svg?name=${participant.name.split(' ')[0]}+${participant.name.split(' ')[1]}`}  alt="" />
+        )
+       }
+       
       <div>
         <h1 className='font-bold'>{participant.name}</h1>
         <p>{participant.email}</p>
@@ -356,6 +365,7 @@ function ChatBox(props) {
         </span>
         </button>
       </div>
+      <p>Don't share your personal details.</p>
     </div>
     )
     :(<h1 className=''></h1>) }

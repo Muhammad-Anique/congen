@@ -112,14 +112,7 @@ function ActivitySelector(props) {
   const handleSubmit = async (e) => {   
     setIsloading(true)
     try {
-      // Make POST request to API
-      const requestBody = {
-        ...props.Data,
-        isYoung : props.isYoung, 
-        isOld : props.isOld,
-        ...activity
-      };
-
+    
    
       console.log("---->",props.Data, activity) 
 
@@ -141,12 +134,13 @@ function ActivitySelector(props) {
       const Remote = getTrueRatingIndex(Remote_);
 
          
-    let { data, error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: email,
       password: password
     })
 
     if(data){
+      console.log("wdiemwd" , data)
       const uuid = data.user.id
       const userAdded = await supabase
       .from('user')
@@ -170,10 +164,14 @@ function ActivitySelector(props) {
         setIsloading(false)
       }
     }
-    console.log(data)
+    else if(error){
+      console.log("wdiemwd" , error)
+      console.log(error)
+    }
+    
     } catch (error) {
       setIsloading(false)
-      console.error('Error submitting form:', error.message);
+      console.error('Error submitting form:', error);
       alert('Failed to submit form. Please try again.');
     }
   };
