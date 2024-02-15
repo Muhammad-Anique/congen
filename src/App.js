@@ -12,31 +12,41 @@ import supabase from './config/supabaseClient';
 import OldDashboard from './Pages/OldDashboard';
 import { useEffect, useState } from 'react';
 
-import {
-  Translator,
-  T,
-  Config
-} from "react-translator-component";
+import { initReactI18next } from 'react-i18next';
+import i18n from 'i18next';
 
 
-Config.default = "en";
+import { useTranslation } from 'react-i18next';
+// Import your translations
+import translationEN from './locale/en.json';
+import translationIT from './locale/it.json';
 
-Config.list = {
-  en: {
-    text: "English",
-    file: require("./locale/en.locale")
-  },
-  it: {
-    text: "Italiano",
-    file: require("./locale/it.locale")
-  }
-};
+// Configure i18next
+i18n
+  .use(initReactI18next) // passes i18n down to react-i18next
+  .init({
+    resources: {
+      en: {
+        translation: translationEN
+      },
+      it: {
+        translation: translationIT
+      }
+    },
+    lng: 'it', // set the initial language
+    fallbackLng: 'en', // if a translation is missing, fallback to English
+    interpolation: {
+      escapeValue: false // React already does escaping
+    }
+  });
+
 
 function App() {
   console.log(supabase)
-  const [language, setLanguage] = useState(Config.default);
   const dispatch = useDispatch();
   
+  const [lang, setLang] =useState("it")
+  const { t } = useTranslation();
   useEffect(() => {
     const handleBeforeUnload = (event) => {
       // This function will be called when the window is about to unload
@@ -83,7 +93,15 @@ function App() {
 
   return (
       <>
-    
+      <div className='absolute bottom-2 right-2 z-50 flex flex-col gap-2'>
+      <div className=' w-[130px] h-[40px] bg-white text-white rounded-sm shadow-md z-50 flex flex-row p-4 justify-center items-center gap-2'>
+      <img onClick={() => {i18n.changeLanguage("en"); setLang("en") }} className={`cursor-pointer w-[40px] ${lang==="en" ? ('scale-125 '):('')}`} src="https://flagsapi.com/US/flat/64.png"/>
+      <img onClick={() => {i18n.changeLanguage("it"); setLang("it") }} className={`cursor-pointer  w-[40px] ${lang==="it" ? ('scale-125'):('')} `} src="https://flagsapi.com/IT/flat/64.png"/>
+       </div>
+      <div className='w-[130px] h-[40px] bg-primary text-primary2 rounded-sm shadow-md  flex p-4 justify-center items-center hover:bg-secondary cursor-pointer'>
+      <p className='font-bold'>{t("Translate")}</p>
+      </div>
+      </div>   
       <Page/>
   </>
   );
@@ -119,16 +137,7 @@ export default App;
 
 
   // {/* <Translator>
-  //     <div className='absolute bottom-2 right-2 z-50 flex flex-col gap-2'>
-  //     <div className=' w-[100px] h-[30px] bg-white text-white rounded-sm shadow-md z-50 flex flex-row p-4 justify-center items-center gap-2'>
-  //     <img onClick={() => setLanguage("en")} className='hover:scale-110 cursor-pointer' src="https://flagsapi.com/US/flat/32.png"/>
-  //     <img onClick={() => setLanguage("it")} className='hover:scale-110 cursor-pointer' src="https://flagsapi.com/IT/flat/32.png"/>
-  //      </div>
-  //     <div className='w-[100px] h-[30px] bg-primary text-white rounded-sm shadow-md  flex p-4 justify-center items-center hover:bg-secondary cursor-pointer'>
-  //       {/* <p className='font-bold '>{("Translate")}</p> */}
-  //       <h1>{T("Hello, World!")}</h1>
-  //     </div>
-  //     </div>
+      
      
   //     <Page/> 
   //     </Translator> */}

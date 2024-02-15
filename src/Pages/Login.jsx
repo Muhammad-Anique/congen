@@ -122,7 +122,7 @@ function Login() {
     <div className='w-[40%] h-full bg-white flex flex-col justify-center items-center gap-[30px]'>
       <div className='flex flex-col justify-center items-center gap-3'>
       <img src={logo} className='h-[120px] w-[120px]' alt="" />
-      <p  className='text-[#4b4b4b] w-[300px] leading-[20px] text-center '>Put your credential to login to congen organization and get connected</p>
+      <p  className='text-[#4b4b4b] w-[300px] leading-[20px] text-center '>{t("Hello, World!")}</p>
       </div>
   
       <div className='flex flex-col justify-center items-center gap-[10px]'>
