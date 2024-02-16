@@ -54,7 +54,29 @@
   "send": "send",
   "Request":"Request",
   "Chat":"Chat",
-  "No Match Found":"No Match Found"
+  "No Match Found":"No Match Found",
+  "Failed to send message request":"Failed to send message request",
+  "Your message request has been sent":"Your message request has been sent",
+  "Basic computer course: Teaching seniors how to use a computer or smartphone.": "Basic computer course: Teaching seniors how to use a computer or smartphone.",
+  "Basic computer course: Teaching seniors how to use a computer or smartphone": "Basic computer course: Teaching seniors how to use a computer or smartphone",
+
+  "Cooking lessons: Teaching them to cook simple and healthy dishes.": "Cooking lessons: Teaching them to cook simple and healthy dishes.",
+  "Language exchange: Practicing foreign languages together through conversations.": "Language exchange: Practicing foreign languages together through conversations.",
+  "Shared reading: Reading books or articles together and discussing them.": "Shared reading: Reading books or articles together and discussing them.",
+  "Artistic and craft activities: Creating artistic projects together such as painting, drawing, or crafts.": "Artistic and craft activities: Creating artistic projects together such as painting, drawing, or crafts.",
+  "Music lessons: Teaching to play an instrument or singing together.": "Music lessons: Teaching to play an instrument or singing together.",
+  "Card games or board games: Organizing card games or board games for fun together.": "Card games or board games: Organizing card games or board games for fun together.",
+  "Storytelling activities: Sharing life stories and personal experiences.": "Storytelling activities: Sharing life stories and personal experiences.",
+  "Guided tastings of wines or foods, where each participant brings something to share.": "Guided tastings of wines or foods, where each participant brings something to share.",
+  "Park walks: Enjoying nature and taking a walk together in the park.": "Park walks: Enjoying nature and taking a walk together in the park.",
+  "Visits to museums or art exhibitions: Exploring artworks and culture together.": "Visits to museums or art exhibitions: Exploring artworks and culture together.",
+  "Visits to local markets: Exploring local markets or fairs.": "Visits to local markets: Exploring local markets or fairs.",
+  "Photography passion: Organizing an outdoor photo session to capture special moments.": "Photography passion: Organizing an outdoor photo session to capture special moments.",
+  "Cinema passion: Participating in a movie night by watching one of your favorite films.": "Cinema passion: Participating in a movie night by watching one of your favorite films.",
+  "Sports with professionals: Participating in fitness sessions to stay fit at our affiliated facilities and avail exceptional discounts.": "Sports with professionals: Participating in fitness sessions to stay fit at our affiliated facilities and avail exceptional discounts.",
+  "Community volunteer activities.": "Community volunteer activities.",
+  "Video calls: Making video calls to connect and converse.": "Video calls: Making video calls to connect and converse.",
+  "Voice calls: Making voice calls to connect and converse.": "Voice calls: Making voice calls to connect and converse."
   
 
   

@@ -61,36 +61,36 @@ function OldDashboard() {
       "Indoor": {
         "rating":[false, false, false],
         "preferredActivities":[
-          { "Craft workshops such as ceramics, knitting, or painting." : false,
-          "Book clubs or literary discussion groups." : false,
-          "Movie or documentary nights with group discussions." : false,
-          "Wellness activities" : false,
-          "DIY or home improvement courses for small domestic projects." : false,
-          "Guided tastings of wines or foods, where each participant brings something to share" : false,
+          { "Basic computer course: Teaching seniors how to use a computer or smartphone": false,
+          "Cooking lessons: Teaching them to cook simple and healthy dishes.": false,
+          "Language exchange: Practicing foreign languages together through conversations.": false,
+          "Shared reading: Reading books or articles together and discussing them.": false,
+          "Artistic and craft activities: Creating artistic projects together such as painting, drawing, or crafts.": false,
+          "Music lessons: Teaching to play an instrument or singing together.": false,
+          "Card games or board games: Organizing card games or board games for fun together.": false,
+          "Storytelling activities: Sharing life stories and personal experiences.": false,
+          "Guided tastings of wines or foods, where each participant brings something to share.": false
            }
         ]
       },
       "Outdoor":{
         "rating":[false, false, false],
         "preferredActivities":[
-          { "Nature trekking on marked trails." : false,
-            "Guided tours to museums or historical sites." : false,
-            "Participation in clubs or interest groups such as photography, birdwatching, or stargazing." : false,
-            "Community volunteer activities, such as park clean-ups or participation in environmental projects." : false,
-            "Gardening or horticulture courses in community spaces." : false,
+          {  "Park walks: Enjoying nature and taking a walk together in the park.": false,
+          "Visits to museums or art exhibitions: Exploring artworks and culture together.": false,
+          "Visits to local markets: Exploring local markets or fairs.": false,
+          "Photography passion: Organizing an outdoor photo session to capture special moments.": false,
+          "Cinema passion: Participating in a movie night by watching one of your favorite films.": false,
+          "Sports with professionals: Participating in fitness sessions to stay fit at our affiliated facilities and avail exceptional discounts.": false,
+          "Community volunteer activities.": false
            }
         ]    
       },
       "Remote":{
         "rating":[false, false, false],
         "preferredActivities":[
-          { "Call" : false,
-          "Videocalls" : false,
-          "Webinars or online conferences on general or specific topics of interest." : false,
-          "Online study or reading groups." : false,
-          "Participation in online group games, like quizzes or strategy games." : false,
-          "Online fitness or yoga sessions for groups." : false,
-          "Virtual clubs, like a movie club where a film is watched separately and then discussed together online." : false}
+          {"Video calls: Making video calls to connect and converse.": false,
+          "Voice calls: Making voice calls to connect and converse.": false}
         ]
       }
     })
@@ -174,7 +174,7 @@ function OldDashboard() {
   }
     if(data==0){
       return(
-        <div className='w-[82vw] bg-gray-100 p-[50px] flex flex-col gap-10'>
+        <div className='w-[82vw] bg-gray-100 p-[50px] pb-5 flex flex-col gap-10'>
         <div className='flex flex-row justify-between items-center'>
         <h1 className='text-4xl font-bold '>{t("My Profile")}</h1>
         <div className=' w-auto px-[15px] py-[10px] h-[40px] bg-white rounded-full flex items-center justify-center'>
@@ -183,10 +183,10 @@ function OldDashboard() {
         <h1 className='font-bold'>{user.name}</h1>
   
         </div>
-        <MyProfile user={user}/>
+       
   
         <div className='h-full w-full flex flex-row justify-between flex-wrap overflow-y-scroll gap-8'>
-  
+        <MyProfile user={user}/>
         <div name="ActivityIndoor" className='w-full h-auto flex gap-7 flex-row items-center '>
           <div className='bg-white rounded-xl shadow-md w-[400px]  h-[230px] flex gap-7 flex-col items-center justify-center'>
             <h1 className='font-bold text-xl text-[#4b4b4b]'>{t("Indoor Activity")}</h1>
@@ -216,7 +216,7 @@ function OldDashboard() {
             {Object.entries(activity["Indoor"].preferredActivities[0]).map(([activityName, checked], index) => (
               <div className='bg-white w-auto max-w-[100%] max-h-[80px] h-auto rounded-xl flex flex-row justify-center items-center p-2 border-2 border-primary gap-3 checkbox-wrapper' key={index}>
                 <input type="checkbox" checked={checked} onChange={() => handlePreferredActivityChange("Indoor", activityName)} />
-                <p>{activityName}</p>
+                <p>{t(`${activityName}`)}</p>
               </div>
             ))}
           </div>
@@ -253,7 +253,7 @@ function OldDashboard() {
             {Object.entries(activity["Outdoor"].preferredActivities[0]).map(([activityName, checked], index) => (
               <div className='bg-white w-auto max-w-[100%] max-h-[80px] h-auto rounded-xl flex flex-row justify-center items-center p-2 border-2 border-primary3 gap-3 checkbox-wrapper' key={index}>
                 <input type="checkbox" checked={checked} onChange={() => handlePreferredActivityChange("Outdoor", activityName)} />
-                <p>{activityName}</p>
+                <p>{t(`${activityName}`)}</p>
               </div>
             ))}
           </div>
@@ -289,7 +289,7 @@ function OldDashboard() {
             {Object.entries(activity["Remote"].preferredActivities[0]).map(([activityName, checked], index) => (
               <div className='bg-white w-auto max-w-[90%] max-h-[80px] h-auto rounded-xl flex flex-row justify-center items-center p-2 border-2 border-primary gap-3 checkbox-wrapper' key={index}>
                 <input type="checkbox" checked={checked} onChange={() => handlePreferredActivityChange("Remote", activityName)} />
-                <p>{activityName}</p>
+                <p>{t(`${activityName}`)}</p>
               </div>
             ))}
           </div>
@@ -382,7 +382,7 @@ function OldDashboard() {
       </div>
       </div>
     
-       <div onClick={()=>{dispatch(setOldDashboardSlice(0)); dispatch(setNavigation(0)); updateUser(user.id)}}  className='flex flex-row items-center gap-3 bg-gray-100 px-[15px] rounded-sm hover:bg-primary hover:cursor-pointer hover:text-white  py-[10px]'>
+       <div onClick={()=>{dispatch(setOldDashboardSlice(0)); dispatch(setNavigation(0));window.location.href = 'https://congen.it'; updateUser(user.id)}}  className='flex flex-row items-center gap-3 bg-gray-100 px-[15px] rounded-sm hover:bg-primary hover:cursor-pointer hover:text-white  py-[10px]'>
        <FiLogOut size={20} />
         <button   className=' text-lg'>{t("LogOut")}</button>
         </div>     

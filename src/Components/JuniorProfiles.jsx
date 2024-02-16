@@ -218,13 +218,13 @@ useEffect(() => {
                     .select()
                     .single()
                     if(messageData.data){
-                      handleSuccess('Your message request has been sent')
+                      handleSuccess(`${t("Your message request has been sent")}`)
                       setIsloading(false)
                       console.log('Conversation inserted successfully:', insertResult.data);
                     }
 
                     else if(messageData.error){
-                     handleFailure("Failed to send message request")
+                     handleFailure(`${t("Failed to send message request")}`)
                       setIsloading(false)
                       console.log('Conversation inserted successfully:', insertResult.data);
                     }
@@ -268,8 +268,8 @@ useEffect(() => {
           </div>
         </div>
   
-        <h1 className='font-bold text-primary px-3 mt-2'> {type} {t("Activity")}</h1>
-        <p className='px-3 min-h-[60px]'>{activity}</p>
+        <h1 className='font-bold text-primary px-3 mt-2'> {t(`${type} Activity`)}</h1>
+        <p className='px-3 min-h-[60px]'>{t(`${activity}`)}</p>
   
         <div className='flex flex-row justify-between px-3 items-center mt-2'>
          

@@ -45,12 +45,15 @@ function ActivitySelector(props) {
       "isActive": true,
       "rating":[false, false, false],
       "preferredActivities":[
-        { "Craft workshops such as ceramics, knitting, or painting." : false,
-        "Book clubs or literary discussion groups." : false,
-        "Movie or documentary nights with group discussions." : false,
-        "Wellness activities" : false,
-        "DIY or home improvement courses for small domestic projects." : false,
-        "Guided tastings of wines or foods, where each participant brings something to share" : false,
+        { "Basic computer course: Teaching seniors how to use a computer or smartphone": false,
+        "Cooking lessons: Teaching them to cook simple and healthy dishes.": false,
+        "Language exchange: Practicing foreign languages together through conversations.": false,
+        "Shared reading: Reading books or articles together and discussing them.": false,
+        "Artistic and craft activities: Creating artistic projects together such as painting, drawing, or crafts.": false,
+        "Music lessons: Teaching to play an instrument or singing together.": false,
+        "Card games or board games: Organizing card games or board games for fun together.": false,
+        "Storytelling activities: Sharing life stories and personal experiences.": false,
+        "Guided tastings of wines or foods, where each participant brings something to share.": false
          }
       ]
 
@@ -59,11 +62,13 @@ function ActivitySelector(props) {
       "isActive": false,
       "rating":[false, false, false],
       "preferredActivities":[
-        { "Nature trekking on marked trails." : false,
-          "Guided tours to museums or historical sites." : false,
-          "Participation in clubs or interest groups such as photography, birdwatching, or stargazing." : false,
-          "Community volunteer activities, such as park clean-ups or participation in environmental projects." : false,
-          "Gardening or horticulture courses in community spaces." : false,
+        {  "Park walks: Enjoying nature and taking a walk together in the park.": false,
+        "Visits to museums or art exhibitions: Exploring artworks and culture together.": false,
+        "Visits to local markets: Exploring local markets or fairs.": false,
+        "Photography passion: Organizing an outdoor photo session to capture special moments.": false,
+        "Cinema passion: Participating in a movie night by watching one of your favorite films.": false,
+        "Sports with professionals: Participating in fitness sessions to stay fit at our affiliated facilities and avail exceptional discounts.": false,
+        "Community volunteer activities.": false
          }
       ]
       
@@ -72,13 +77,8 @@ function ActivitySelector(props) {
       "isActive": false,
       "rating":[false, false, false],
       "preferredActivities":[
-        { "Call" : false,
-        "Videocalls" : false,
-        "Webinars or online conferences on general or specific topics of interest." : false,
-        "Online study or reading groups." : false,
-        "Participation in online group games, like quizzes or strategy games." : false,
-        "Online fitness or yoga sessions for groups." : false,
-        "Virtual clubs, like a movie club where a film is watched separately and then discussed together online." : false}
+        {"Video calls: Making video calls to connect and converse.": false,
+        "Voice calls: Making voice calls to connect and converse.": false}
       ]
     }
   })

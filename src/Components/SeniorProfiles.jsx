@@ -263,8 +263,9 @@ function SeniorProfiles(props) {
           </div>
         </div>
   
-        <h1 className='font-bold text-primary px-3 mt-2'> {type} {t("Activity")}</h1>
-        <p className='px-3 min-h-[60px]'>{activity}</p>
+        <h1 className='font-bold text-primary px-3 mt-2'> {t(`${type} Activity`)}</h1>
+        <p className='px-3 min-h-[60px]'>{t(`${activity}`)}</p>
+    
   
         <div className='flex flex-row justify-between px-3 items-center mt-2'>
           <button onClick={()=>{handleChat()}} className='bg-primary p-2 w-[100px] text-white rounded-full hover:bg-secondary'>Chat</button>
